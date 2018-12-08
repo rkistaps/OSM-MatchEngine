@@ -7,11 +7,13 @@ use rkistaps\Engine\Helpers\ArrayHelper;
 
 class Coach
 {
+    const SPECIALITY_NON = 'none';
     const SPECIALITY_DEF = 'defence';
     const SPECIALITY_MID = 'midfield';
     const SPECIALITY_ATT = 'attack';
 
     const SPECIALITIES = [
+        Coach::SPECIALITY_NON,
         Coach::SPECIALITY_DEF,
         Coach::SPECIALITY_MID,
         Coach::SPECIALITY_ATT,
@@ -26,9 +28,14 @@ class Coach
      * Coach constructor.
      *
      * @param string $speciality
+     * @throws EngineException
      */
     public function __construct(string $speciality)
     {
+        if(!in_array($speciality, Coach::SPECIALITIES)){
+            throw new EngineException('Incorrect coach speciality');
+        }
+
         $this->speciality = $speciality;
     }
 

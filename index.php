@@ -3,44 +3,33 @@
 // use composer autoloader
 use rkistaps\Engine\Classes\MatchEngine;
 use rkistaps\Engine\Exceptions\EngineException;
+use rkistaps\Engine\Helpers\LineupBuilder;
+use rkistaps\Engine\Structures\Coach;
 use rkistaps\Engine\Structures\MatchSettings;
-use rkistaps\Engine\Structures\Player;
-use rkistaps\Engine\Structures\Squad;
+use rkistaps\Engine\Structures\Tactics\DefaultTactic;
+use rkistaps\Engine\Structures\Team;
 
 require 'vendor/autoload.php';
 
 try {
-    $homeTeam = Squad::fromArray([
-        'lineup' => [
-            [
-                'attributes' => [
-                    'id' => 1,
-                    'skill' => 100,
-                    'energy' => 100,
-                    'position' => Player::POS_D
-                ]
-            ]
-        ]
-    ]);
+    $homeTeamLineup = LineupBuilder::buildRandomLineup(4,4,2);
+    $homeTeamTactic = new DefaultTactic();
+    $homeTeam = new Team($homeTeamLineup, $homeTeamTactic);
 
-    $awayTeam = Squad::fromArray([
-        'lineup' => [
-            [
-                'attributes' => [
-                    'id' => 1,
-                    'skill' => 100,
-                    'energy' => 100,
-                    'position' => Player::POS_D
-                ]
-            ]
-        ]
-    ]);
+    $awayTeamLineup = LineupBuilder::buildRandomLineup(4,4,2);
+    $awayTeamTactic = new DefaultTactic();
+    $awayTeam = new Team($awayTeamLineup, $awayTeamTactic);
 
     $settings = new MatchSettings();
     $matchEngine = new MatchEngine($settings);
 
+    $coach = new Coach(Coach::SPECIALITY_ATT);
+    $homeTeam->setCoach($coach);
+
+    $coach = new Coach(Coach::SPECIALITY_DEF);
+    $awayTeam->setCoach($coach);
+
     $result = $matchEngine->play($homeTeam, $awayTeam);
-    $result->play();
 
     var_dump($result);
 } catch (EngineException $e) {

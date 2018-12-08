@@ -4,7 +4,7 @@ namespace rkistaps\Engine\Classes;
 
 use rkistaps\Engine\Exceptions\EngineException;
 use rkistaps\Engine\Structures\MatchSettings;
-use rkistaps\Engine\Structures\Squad;
+use rkistaps\Engine\Structures\Team;
 
 class MatchEngine
 {
@@ -24,12 +24,12 @@ class MatchEngine
     /**
      * Play match
      *
-     * @param Squad $homeTeam
-     * @param Squad $awayTeam
+     * @param Team $homeTeam
+     * @param Team $awayTeam
      * @return Match
      * @throws EngineException
      */
-    public function play(Squad $homeTeam, Squad $awayTeam): Match
+    public function play(Team $homeTeam, Team $awayTeam): Match
     {
         $match = new Match($homeTeam, $awayTeam, $this->settings);
 

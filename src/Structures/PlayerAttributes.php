@@ -7,7 +7,7 @@ use rkistaps\Engine\Helpers\ArrayHelper;
 
 class PlayerAttributes
 {
-    /** @var int */
+    /** @var int|string */
     public $id = 0;
 
     /** @var string */
@@ -17,7 +17,7 @@ class PlayerAttributes
     public $skill = 0;
 
     /** @var int */
-    public $energy = 0;
+    public $energy = 100;
 
     /**
      * Build attributes from array
@@ -28,6 +28,8 @@ class PlayerAttributes
      */
     public static function fromArray(array $array): PlayerAttributes
     {
+        $attributes = new PlayerAttributes();
+
         $id = ArrayHelper::get('id', $array);
         if (!$id) {
             throw new EngineException("Can't build player from array: missing id");
@@ -44,15 +46,13 @@ class PlayerAttributes
         }
 
         $energy = ArrayHelper::get('energy', $array);
-        if (!$energy) {
-            throw new EngineException("Can't build player from array: missing energy");
+        if (!is_null($energy)) {
+            $attributes->energy = (int)$energy;
         }
 
-        $attributes = new PlayerAttributes();
         $attributes->id = $id;
         $attributes->skill = $skill;
         $attributes->position = $position;
-        $attributes->energy = $energy;
 
         return $attributes;
     }

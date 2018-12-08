@@ -12,4 +12,10 @@ class MatchSettings
 
     /** @var float */
     public $coachSpecialityBonus = 1.15;
+
+    /** @var float */
+    public $defenseModifier = 1;
+
+    /** @var float */
+    public $performanceRandomRange = 0.2;
 }

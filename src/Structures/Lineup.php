@@ -58,11 +58,12 @@ class Lineup
 
     /**
      * Process perform on each lineup player
+     * @param float $performanceRandomRange
      */
-    public function perform()
+    public function perform(float $performanceRandomRange)
     {
         foreach ($this->players as $player) {
-            $player->perform();
+            $player->perform($performanceRandomRange);
         }
     }
 

@@ -2,46 +2,86 @@
 
 namespace rkistaps\Engine\Structures;
 
+use rkistaps\Engine\Interfaces\TacticInterface;
+
 class SquadStrength
 {
     /** @var int */
-    public $goalkeeper = 0;
+    private $goalkeeper = 0;
 
-    /** @var int */
-    public $defence = 0;
+    /** @var float */
+    private $defence = 0;
 
-    /** @var int */
-    public $midfield = 0;
+    /** @var float */
+    private $midfield = 0;
 
-    /** @var int */
-    public $attack = 0;
+    /** @var float */
+    private $attack = 0;
 
     /**
-     * Apply bonus to all positions
+     * SquadStrength constructor.
      *
-     * @param int $bonus
+     * @param float $goalkeeper
+     * @param float $defence
+     * @param float $midfield
+     * @param float $attack
      */
-    public function applyBonus(int $bonus)
-    {
-        $this->defence = round($this->defence * (1 + $bonus / 100));
-        $this->midfield = round($this->midfield * (1 + $bonus / 100));
-        $this->attack = round($this->attack * (1 + $bonus / 100));
+    public function __construct(float $goalkeeper = 0, float $defence = 0, float $midfield = 0, float $attack = 0) {
+        $this->goalkeeper = $goalkeeper;
+        $this->defence = $defence;
+        $this->midfield = $midfield;
+        $this->attack = $attack;
     }
 
     /**
-     * Apply bonus to all positions
+     * Return strength
      *
-     * @param string $position
-     * @param float $bonus
+     * @return array
      */
-    public function applyBonusToPosition(string $position, float $bonus)
+    public function get(): array
     {
-        if ($position == Player::POS_D) {
-            $this->defence = round($this->defence * $bonus);
-        } elseif ($position == Player::POS_M) {
-            $this->midfield = round($this->midfield * $bonus);
-        } elseif ($position == Player::POS_F) {
-            $this->attack = round($this->attack * $bonus);
-        }
+        return [
+            $this->goalkeeper,
+            $this->defence,
+            $this->midfield,
+            $this->attack,
+        ];
+    }
+
+    /**
+     * Modify strength by multiplying modifier values
+     *
+     * @param SquadStrengthModifier $modifier
+     */
+    public function modify(SquadStrengthModifier $modifier)
+    {
+        $this->goalkeeper = $this->goalkeeper * $modifier->goalkeeperModifier;
+        $this->defence = $this->defence * $modifier->defenseModifier;
+        $this->midfield = $this->midfield * $modifier->midfieldModifier;
+        $this->attack = $this->attack * $modifier->attackModifier;
+    }
+
+    /**
+     * Modify strength by adding modifier values
+     *
+     * @param SquadStrengthModifier $modifier
+     */
+    public function modifyFlat(SquadStrengthModifier $modifier)
+    {
+        $this->goalkeeper = $this->goalkeeper + $modifier->goalkeeperModifier;
+        $this->defence = $this->defence + $modifier->defenseModifier;
+        $this->midfield = $this->midfield + $modifier->midfieldModifier;
+        $this->attack = $this->attack + $modifier->attackModifier;
+    }
+
+    /**
+     * Apply tactic
+     *
+     * @param TacticInterface $tactic
+     */
+    public function applyTactic(TacticInterface $tactic)
+    {
+        $modifier = $tactic->getSquadStrengthModifier($this);
+        $this->modifyFlat($modifier);
     }
 }
