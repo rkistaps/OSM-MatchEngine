@@ -95,9 +95,9 @@ class Team
 
     /**
      * Preform
-     * @param float $performanceRandomRange
+     * @param int $performanceRandomRange
      */
-    public function perform(float $performanceRandomRange)
+    public function perform(int $performanceRandomRange)
     {
         $this->lineup->perform($performanceRandomRange);
         $this->strength = $this->calculateStrength();

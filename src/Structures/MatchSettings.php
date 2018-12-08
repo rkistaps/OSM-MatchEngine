@@ -25,6 +25,12 @@ class MatchSettings
     /** @var float */
     public $attackModifier = 2.5;
 
-    /** @var float */
-    public $performanceRandomRange = 0;
+    /** @var int */
+    public $performanceRandomRange = 10;
+
+    /** @var int */
+    public $baseAttackCount = 10;
+
+    /** @var int */
+    public $attackCountRandomModifier = 10;
 }

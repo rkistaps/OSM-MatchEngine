@@ -30,6 +30,12 @@ class Match
     /** @var Possession */
     private $possession;
 
+    /** @var int */
+    private $homeTeamAttackCount = 0;
+
+    /** @var int */
+    private $awayTeamAttackCount = 0;
+
     /** @var PossessionCalculator */
     private $possessionCalculator;
 
@@ -68,6 +74,17 @@ class Match
         $this->modifyStrengths();
 
         $this->possession = $this->possessionCalculator->calculate($this->homeTeam->getStrength(), $this->awayTeam->getStrength());
+
+        $possession = $this->possession;
+        $baseAttackCount = $this->settings->baseAttackCount;
+        $attackCountRandomModifier = rand(100 - $this->settings->attackCountRandomModifier, 100 + $this->settings->attackCountRandomModifier) / 100;
+
+        $this->homeTeamAttackCount = round($baseAttackCount * $possession->homeTeam * $attackCountRandomModifier);
+        $this->awayTeamAttackCount = round($baseAttackCount * $possession->awayTeam * $attackCountRandomModifier);
+
+        // TODO add additional attack count calculation
+
+
 
         $this->isPlayed = true;
 

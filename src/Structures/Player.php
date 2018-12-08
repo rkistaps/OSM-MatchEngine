@@ -74,11 +74,11 @@ class Player
 
     /**
      * Perform
-     * @param float $performanceRandomRange
+     * @param int $performanceRandomRange
      */
-    public function perform(float $performanceRandomRange)
+    public function perform(int $performanceRandomRange)
     {
-        $this->performanceK = rand(1 - $performanceRandomRange, 1 + $performanceRandomRange);
+        $this->performanceK = rand(100 - $performanceRandomRange, 100 + $performanceRandomRange) / 100;
         $this->performance = floor($this->attributes->skill * $this->performanceK * $this->attributes->energy / 100);
     }
 
