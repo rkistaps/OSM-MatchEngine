@@ -1,0 +1,14 @@
+{
+    "name": "rkistaps/match-engine",
+    "description": "Match engine",
+    "type": "composer-plugin",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "rkistaps\\Engine\\": "src/"
+        }
+    }
+}
