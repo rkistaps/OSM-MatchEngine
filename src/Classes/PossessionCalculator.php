@@ -36,10 +36,10 @@ class PossessionCalculator
         $homeTeamK = $homeTeamStrength * 2 / $awayTeamStrength;
         $awayTeamK = $awayTeamStrength * 2 / $homeTeamStrength;
 
-        $randomModifier = rand(1 - $this->settings->randomRange, 1 + $this->settings->randomRange);
+        $randomModifier = rand(100 - $this->settings->randomRange, 100 + $this->settings->randomRange) / 100;
 
         $homeTeamPossession = $homeTeamK / ($homeTeamK + $awayTeamK) * $randomModifier;
-        $homeTeamPossession = $homeTeamPossession < 0.99 ?: 0.99;
+        $homeTeamPossession = $homeTeamPossession < 0.99 ? $homeTeamPossession : 0.99;
 
         $awayTeamPossession = 1 - $homeTeamPossession;
 
