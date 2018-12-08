@@ -19,24 +19,27 @@ class Coach
         Coach::SPECIALITY_ATT,
     ];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $speciality;
+
+    /** @var int */
+    private $level = 1;
 
     /**
      * Coach constructor.
      *
      * @param string $speciality
+     * @param int $level
      * @throws EngineException
      */
-    public function __construct(string $speciality)
+    public function __construct(string $speciality, int $level)
     {
         if(!in_array($speciality, Coach::SPECIALITIES)){
             throw new EngineException('Incorrect coach speciality');
         }
 
         $this->speciality = $speciality;
+        $this->level = $level;
     }
 
     /**
@@ -47,6 +50,16 @@ class Coach
     public function getSpeciality(): string
     {
         return $this->speciality;
+    }
+
+    /**
+     * Get coach level
+     *
+     * @return int
+     */
+    public function getLevel(): int
+    {
+        return $this->level;
     }
 
     /**
@@ -64,6 +77,8 @@ class Coach
             throw new EngineException('No speciality provided');
         }
 
-        return new Coach($speciality);
+        $level = (int)ArrayHelper::get('level', $array, 1);
+
+        return new Coach($speciality, $level);
     }
 }

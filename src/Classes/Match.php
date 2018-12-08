@@ -6,6 +6,7 @@ use rkistaps\Engine\Exceptions\EngineException;
 use rkistaps\Engine\Structures\Coach;
 use rkistaps\Engine\Structures\MatchSettings;
 use rkistaps\Engine\Structures\MatchResult;
+use rkistaps\Engine\Structures\Possession;
 use rkistaps\Engine\Structures\SquadStrengthModifier;
 use rkistaps\Engine\Structures\Team;
 
@@ -26,11 +27,11 @@ class Match
     /** @var bool */
     private $isPlayed = false;
 
-    /** @var float */
-    private $homeTeamPossession = 0;
+    /** @var Possession */
+    private $possession;
 
-    /** @var float */
-    private $awayTeamPossession = 0;
+    /** @var PossessionCalculator */
+    private $possessionCalculator;
 
     /**
      * Match constructor.
@@ -38,12 +39,14 @@ class Match
      * @param Team $homeTeam
      * @param Team $awayTeam
      * @param MatchSettings $settings
+     * @param PossessionCalculator $possessionCalculator
      */
-    public function __construct(Team $homeTeam, Team $awayTeam, MatchSettings $settings)
+    public function __construct(Team $homeTeam, Team $awayTeam, MatchSettings $settings, PossessionCalculator $possessionCalculator)
     {
         $this->homeTeam = $homeTeam;
         $this->awayTeam = $awayTeam;
         $this->settings = $settings;
+        $this->possessionCalculator = $possessionCalculator;
     }
 
     /**
@@ -64,19 +67,11 @@ class Match
         $this->awayTeam->perform($this->settings->performanceRandomRange);
         $this->modifyStrengths();
 
-        $this->calculatePossessions();
+        $this->possession = $this->possessionCalculator->calculate($this->homeTeam->getStrength(), $this->awayTeam->getStrength());
 
         $this->isPlayed = true;
 
         return $this->result;
-    }
-
-    /**
-     * Calculate ball possession
-     */
-    private function calculatePossessions()
-    {
-
     }
 
     /**
@@ -92,8 +87,12 @@ class Match
             $this->homeTeam->getStrength()->modify($modifier);
         }
 
+        // modify by coach
         $this->modifyStrengthByCoach($this->homeTeam);
         $this->modifyStrengthByCoach($this->awayTeam);
+
+        $this->homeTeam->getStrength()->applyTactic($this->homeTeam->getTactic());
+        $this->awayTeam->getStrength()->applyTactic($this->awayTeam->getTactic());
     }
 
     /**
@@ -104,19 +103,27 @@ class Match
     public function modifyStrengthByCoach(Team $team)
     {
         $coach = $team->getCoach();
-        if(!$coach){
+        if (!$coach) {
             return;
+        }
+        $levelBonus = $this->settings->coachLevelBonus * $coach->getLevel();
+
+        $defenseModifier = $levelBonus;
+        $midfieldModifier = $levelBonus;
+        $attackModifier = $levelBonus;
+
+        if ($coach->getSpeciality() == Coach::SPECIALITY_DEF) {
+            $defenseModifier *= $this->settings->coachSpecialityBonus;
+        } elseif ($coach->getSpeciality() == Coach::SPECIALITY_MID) {
+            $midfieldModifier *= $this->settings->coachSpecialityBonus;
+        } elseif ($coach->getSpeciality() == Coach::SPECIALITY_ATT) {
+            $attackModifier *= $this->settings->coachSpecialityBonus;
         }
 
         $modifier = new SquadStrengthModifier();
-
-        if ($coach->getSpeciality() == Coach::SPECIALITY_DEF) {
-            $modifier->defenseModifier = $this->settings->coachSpecialityBonus;
-        } elseif ($coach->getSpeciality() == Coach::SPECIALITY_MID) {
-            $modifier->midfieldModifier = $this->settings->coachSpecialityBonus;
-        } elseif ($coach->getSpeciality() == Coach::SPECIALITY_ATT) {
-            $modifier->attackModifier = $this->settings->coachSpecialityBonus;
-        }
+        $modifier->defenseModifier = $defenseModifier;
+        $modifier->midfieldModifier = $midfieldModifier;
+        $modifier->attackModifier = $attackModifier;
 
         $team->getStrength()->modify($modifier);
     }

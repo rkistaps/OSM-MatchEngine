@@ -2,10 +2,12 @@
 
 // use composer autoloader
 use rkistaps\Engine\Classes\MatchEngine;
+use rkistaps\Engine\Classes\PossessionCalculator;
 use rkistaps\Engine\Exceptions\EngineException;
 use rkistaps\Engine\Helpers\LineupBuilder;
 use rkistaps\Engine\Structures\Coach;
 use rkistaps\Engine\Structures\MatchSettings;
+use rkistaps\Engine\Structures\Settings\PossessionCalculatorSettings;
 use rkistaps\Engine\Structures\Tactics\DefaultTactic;
 use rkistaps\Engine\Structures\Team;
 
@@ -20,13 +22,16 @@ try {
     $awayTeamTactic = new DefaultTactic();
     $awayTeam = new Team($awayTeamLineup, $awayTeamTactic);
 
-    $settings = new MatchSettings();
-    $matchEngine = new MatchEngine($settings);
+    $calcSettings = new PossessionCalculatorSettings();
+    $possessionCalculator = new PossessionCalculator($calcSettings);
 
-    $coach = new Coach(Coach::SPECIALITY_ATT);
+    $settings = new MatchSettings();
+    $matchEngine = new MatchEngine($settings, $possessionCalculator);
+
+    $coach = new Coach(Coach::SPECIALITY_ATT, 1);
     $homeTeam->setCoach($coach);
 
-    $coach = new Coach(Coach::SPECIALITY_DEF);
+    $coach = new Coach(Coach::SPECIALITY_DEF, 1);
     $awayTeam->setCoach($coach);
 
     $result = $matchEngine->play($homeTeam, $awayTeam);

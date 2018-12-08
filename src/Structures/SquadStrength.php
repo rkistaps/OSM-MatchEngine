@@ -34,6 +34,38 @@ class SquadStrength
     }
 
     /**
+     * @return float
+     */
+    public function getGoalkeeper(): float
+    {
+        return $this->goalkeeper;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDefemse(): float
+    {
+        return $this->defence;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMidfield(): float
+    {
+        return $this->midfield;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAttack(): float
+    {
+        return $this->attack;
+    }
+
+    /**
      * Return strength
      *
      * @return array

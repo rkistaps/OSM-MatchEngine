@@ -11,14 +11,19 @@ class MatchEngine
     /** @var MatchSettings */
     private $settings;
 
+    /** @var PossessionCalculator */
+    private $possessionCalculator;
+
     /**
      * MatchEngine constructor.
      *
      * @param MatchSettings $settings
+     * @param PossessionCalculator $calculator
      */
-    public function __construct(MatchSettings $settings)
+    public function __construct(MatchSettings $settings, PossessionCalculator $calculator)
     {
         $this->settings = $settings;
+        $this->possessionCalculator= $calculator;
     }
 
     /**
@@ -31,7 +36,7 @@ class MatchEngine
      */
     public function play(Team $homeTeam, Team $awayTeam): Match
     {
-        $match = new Match($homeTeam, $awayTeam, $this->settings);
+        $match = new Match($homeTeam, $awayTeam, $this->settings, $this->possessionCalculator);
 
         $match->play();
 

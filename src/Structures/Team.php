@@ -59,6 +59,16 @@ class Team
     }
 
     /**
+     * Get team tactic
+     *
+     * @return TacticInterface
+     */
+    public function getTactic(): TacticInterface
+    {
+        return $this->tactic;
+    }
+
+    /**
      * Get squad strength
      *
      * @return SquadStrength
