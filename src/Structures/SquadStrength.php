@@ -44,7 +44,7 @@ class SquadStrength
     /**
      * @return float
      */
-    public function getDefemse(): float
+    public function getDefense(): float
     {
         return $this->defence;
     }

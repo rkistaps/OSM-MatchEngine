@@ -36,6 +36,12 @@ class Match
     /** @var int */
     private $awayTeamAttackCount = 0;
 
+    /** @var int */
+    private $homeTeamShootCount = 0;
+
+    /** @var int */
+    private $awayTeamShootCount = 0;
+
     /** @var PossessionCalculator */
     private $possessionCalculator;
 
@@ -73,7 +79,10 @@ class Match
         $this->awayTeam->perform($this->settings->performanceRandomRange);
         $this->modifyStrengths();
 
-        $this->possession = $this->possessionCalculator->calculate($this->homeTeam->getStrength(), $this->awayTeam->getStrength());
+        $homeTeamStrength = $this->homeTeam->getStrength();
+        $awayTeamStrength = $this->awayTeam->getStrength();
+
+        $this->possession = $this->possessionCalculator->calculate($homeTeamStrength, $awayTeamStrength);
 
         $possession = $this->possession;
         $baseAttackCount = $this->settings->baseAttackCount;
@@ -84,11 +93,49 @@ class Match
 
         // TODO add additional attack count calculation
 
+        // $shoots1 = round( ( $str1[3] + $str1[2]*0.33) / ( $str2[1]*2 + $str2[2]*0.33) * $attacks1 );
+        // $shoots2 = round( ( $str2[3] + $str2[2]*0.33) / ( $str1[1]*2 + $str1[2]*0.33) * $attacks2 );
+
+        $htDefStr = $homeTeamStrength->getDefense();
+        $htMidStr = $homeTeamStrength->getMidfield();
+        $htAttStr = $homeTeamStrength->getAttack();
+
+        $atDefStr = $awayTeamStrength->getDefense();
+        $atMidStr = $awayTeamStrength->getMidfield();
+        $atAttStr = $awayTeamStrength->getAttack();
+
+        $this->homeTeamShootCount = round(($htAttStr + $htMidStr * 0.33) / ($atDefStr + $atMidStr * 0.33) * $this->homeTeamAttackCount);
+        $this->awayTeamShootCount = round(($atAttStr + $atMidStr * 0.33) / ($htDefStr + $htMidStr * 0.33) * $this->awayTeamAttackCount);
+
+        $this->homeTeamShootCount = $this->homeTeamShootCount < $this->homeTeamAttackCount ? $this->homeTeamShootCount : $this->homeTeamAttackCount;
+        $this->awayTeamShootCount = $this->awayTeamShootCount < $this->awayTeamAttackCount ? $this->awayTeamShootCount : $this->awayTeamAttackCount;
+
+        $htAttacksStopped = $this->homeTeamAttackCount - $this->homeTeamShootCount;
+        if ($htAttacksStopped) {
+            $this->addAttackStopEvents($htAttacksStopped, $this->homeTeam, $this->awayTeam);
+        }
+
+        $atAttacksStopped = $this->awayTeamAttackCount - $this->awayTeamShootCount;
+        if ($atAttacksStopped) {
+            $this->addAttackStopEvents($atAttacksStopped, $this->awayTeam, $this->homeTeam);
+        }
 
 
         $this->isPlayed = true;
 
         return $this->result;
+    }
+
+    /**
+     * Add attack stop events to match report
+     *
+     * @param int $count
+     * @param Team $attackingTeam
+     * @param Team $defendingTeam
+     */
+    private function addAttackStopEvents(int $count, Team $attackingTeam, Team $defendingTeam)
+    {
+
     }
 
     /**
