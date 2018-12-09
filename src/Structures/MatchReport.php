@@ -2,7 +2,7 @@
 
 namespace rkistaps\Engine\Structures;
 
-class MatchResult
+class MatchReport
 {
     /** @var int */
     public $homeScore = 0;

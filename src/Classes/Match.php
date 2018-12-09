@@ -4,8 +4,9 @@ namespace rkistaps\Engine\Classes;
 
 use rkistaps\Engine\Exceptions\EngineException;
 use rkistaps\Engine\Structures\Coach;
+use rkistaps\Engine\Structures\Event;
 use rkistaps\Engine\Structures\MatchSettings;
-use rkistaps\Engine\Structures\MatchResult;
+use rkistaps\Engine\Structures\MatchReport;
 use rkistaps\Engine\Structures\Possession;
 use rkistaps\Engine\Structures\SquadStrengthModifier;
 use rkistaps\Engine\Structures\Team;
@@ -21,8 +22,8 @@ class Match
     /** @var MatchSettings */
     private $settings;
 
-    /** @var MatchResult */
-    private $result;
+    /** @var MatchReport */
+    private $report;
 
     /** @var bool */
     private $isPlayed = false;
@@ -59,21 +60,20 @@ class Match
         $this->awayTeam = $awayTeam;
         $this->settings = $settings;
         $this->possessionCalculator = $possessionCalculator;
+        $this->report = new MatchReport();
     }
 
     /**
      * Play match
      *
-     * @return MatchResult
+     * @return MatchReport
      * @throws EngineException
      */
-    public function play(): MatchResult
+    public function play(): MatchReport
     {
         if ($this->isPlayed) {
             throw new EngineException('Match already played');
         }
-
-        $this->result = new MatchResult();
 
         $this->homeTeam->perform($this->settings->performanceRandomRange);
         $this->awayTeam->perform($this->settings->performanceRandomRange);
@@ -92,9 +92,6 @@ class Match
         $this->awayTeamAttackCount = round($baseAttackCount * $possession->awayTeam * $attackCountRandomModifier);
 
         // TODO add additional attack count calculation
-
-        // $shoots1 = round( ( $str1[3] + $str1[2]*0.33) / ( $str2[1]*2 + $str2[2]*0.33) * $attacks1 );
-        // $shoots2 = round( ( $str2[3] + $str2[2]*0.33) / ( $str1[1]*2 + $str1[2]*0.33) * $attacks2 );
 
         $htDefStr = $homeTeamStrength->getDefense();
         $htMidStr = $homeTeamStrength->getMidfield();
@@ -123,7 +120,7 @@ class Match
 
         $this->isPlayed = true;
 
-        return $this->result;
+        return $this->report;
     }
 
     /**
@@ -135,7 +132,17 @@ class Match
      */
     private function addAttackStopEvents(int $count, Team $attackingTeam, Team $defendingTeam)
     {
+        for ($i = $count; $i > 0; $i--) {
+            $minute = rand(1, 93);
 
+            $data = [
+                'attacking_team' => $attackingTeam->getId(),
+                'defending_team' => $defendingTeam->getId(),
+            ];
+
+            $event = new Event(Event::TYPE_TACKLE, $minute, $data);
+            $this->report->addEvent($event);
+        }
     }
 
     /**
@@ -195,15 +202,15 @@ class Match
     /**
      * Get match result
      *
-     * @return MatchResult
+     * @return MatchReport
      * @throws EngineException
      */
-    public function getResult(): MatchResult
+    public function getResult(): MatchReport
     {
         if (!$this->isPlayed) {
             throw new EngineException('Match not played');
         }
 
-        return $this->result;
+        return $this->report;
     }
 }

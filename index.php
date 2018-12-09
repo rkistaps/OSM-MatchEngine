@@ -16,11 +16,11 @@ require 'vendor/autoload.php';
 try {
     $homeTeamLineup = LineupBuilder::buildRandomLineup(4,4,2);
     $homeTeamTactic = new DefaultTactic();
-    $homeTeam = new Team($homeTeamLineup, $homeTeamTactic);
+    $homeTeam = new Team(uniqid(), $homeTeamLineup, $homeTeamTactic);
 
     $awayTeamLineup = LineupBuilder::buildRandomLineup(4,4,2);
     $awayTeamTactic = new DefaultTactic();
-    $awayTeam = new Team($awayTeamLineup, $awayTeamTactic);
+    $awayTeam = new Team(uniqid(), $awayTeamLineup, $awayTeamTactic);
 
     $calcSettings = new PossessionCalculatorSettings();
     $possessionCalculator = new PossessionCalculator($calcSettings);
@@ -31,7 +31,7 @@ try {
     $coach = new Coach(Coach::SPECIALITY_ATT, 1);
     $homeTeam->setCoach($coach);
 
-    $coach = new Coach(Coach::SPECIALITY_DEF, 1);
+    $coach = new Coach(Coach::SPECIALITY_ATT, 1);
     $awayTeam->setCoach($coach);
 
     $result = $matchEngine->play($homeTeam, $awayTeam);

@@ -9,6 +9,9 @@ use rkistaps\Engine\Interfaces\TacticInterface;
 
 class Team
 {
+    /** @var string  */
+    private $id;
+
     /** @var Lineup */
     private $lineup;
 
@@ -28,12 +31,13 @@ class Team
      * @param TacticInterface $tactic
      * @throws EngineException
      */
-    public function __construct(Lineup $lineup, TacticInterface $tactic)
+    public function __construct(string $id, Lineup $lineup, TacticInterface $tactic)
     {
         if (!LineupValidator::staticValidate($lineup)) {
             throw new EngineException("Invalid lineup");
         }
 
+        $this->id = $id;
         $this->lineup = $lineup;
         $this->tactic = $tactic;
     }
@@ -66,6 +70,16 @@ class Team
     public function getTactic(): TacticInterface
     {
         return $this->tactic;
+    }
+
+    /**
+     * Get team id
+     *
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     /**
@@ -122,6 +136,11 @@ class Team
      */
     public static function fromArray(array $array): Team
     {
+        $id = ArrayHelper::get('id', $array);
+        if (!$id) {
+            throw new EngineException('Missing team id');
+        }
+
         $lineupArr = ArrayHelper::get('lineup', $array);
         if (!$lineupArr) {
             throw new EngineException('Missing lineup');
@@ -132,9 +151,10 @@ class Team
             throw new EngineException('Missing tactic');
         }
 
+        $tactic = TacticRepository::getTactic($tactic);
         $lineup = Lineup::fromArray($lineupArr);
 
-        $squad = new Team($lineup, $tactic);
+        $squad = new Team($id, $lineup, $tactic);
 
         return $squad;
     }
