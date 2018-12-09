@@ -113,7 +113,6 @@ class SquadStrength
      */
     public function applyTactic(TacticInterface $tactic)
     {
-        $modifier = $tactic->getSquadStrengthModifier($this);
-        $this->modifyFlat($modifier);
+        $tactic->apply($this);
     }
 }

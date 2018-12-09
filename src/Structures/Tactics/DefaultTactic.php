@@ -4,20 +4,16 @@ namespace rkistaps\Engine\Structures\Tactics;
 
 use rkistaps\Engine\Interfaces\TacticInterface;
 use rkistaps\Engine\Structures\SquadStrength;
-use rkistaps\Engine\Structures\SquadStrengthModifier;
 
 class DefaultTactic implements TacticInterface
 {
     /**
-     * Get SquadStrengthModifier for tactic
+     * Apply tactic to squad strength
      *
      * @param SquadStrength $strength
-     * @return SquadStrengthModifier
      */
-    public function getSquadStrengthModifier(SquadStrength $strength): SquadStrengthModifier
+    public function apply(SquadStrength $strength)
     {
-        $modifier = SquadStrengthModifier::getEmpty();
 
-        return $modifier;
     }
 }

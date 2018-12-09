@@ -3,15 +3,13 @@
 namespace rkistaps\Engine\Interfaces;
 
 use rkistaps\Engine\Structures\SquadStrength;
-use rkistaps\Engine\Structures\SquadStrengthModifier;
 
 interface TacticInterface
 {
     /**
-     * Get SquadStrengthModifier for tactic
+     * Apply tactic to squad strength
      *
      * @param SquadStrength $strength
-     * @return SquadStrengthModifier
      */
-    public function getSquadStrengthModifier(SquadStrength $strength): SquadStrengthModifier;
+    public function apply(SquadStrength $strength);
 }
