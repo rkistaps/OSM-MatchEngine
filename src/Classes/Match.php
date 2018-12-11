@@ -11,7 +11,6 @@ use rkistaps\Engine\Structures\MatchReport;
 use rkistaps\Engine\Structures\Player;
 use rkistaps\Engine\Structures\Possession;
 use rkistaps\Engine\Structures\ShootConfig;
-use rkistaps\Engine\Structures\ShootResult;
 use rkistaps\Engine\Structures\SquadStrengthModifier;
 use rkistaps\Engine\Structures\Team;
 
@@ -53,34 +52,42 @@ class Match
     /** @var int */
     private $saveBonus = 0;
 
+    /** @var ShootEngine */
+    private $shootEngine;
+
+
     /**
      * Match constructor.
      *
-     * @param Team $homeTeam
-     * @param Team $awayTeam
      * @param MatchSettings $settings
      * @param PossessionCalculator $possessionCalculator
+     * @param MatchReport $matchReport
+     * @param ShootEngine $shootEngine
      */
-    public function __construct(Team $homeTeam, Team $awayTeam, MatchSettings $settings, PossessionCalculator $possessionCalculator)
+    public function __construct(MatchSettings $settings, PossessionCalculator $possessionCalculator, MatchReport $matchReport, ShootEngine $shootEngine)
     {
-        $this->homeTeam = $homeTeam;
-        $this->awayTeam = $awayTeam;
         $this->settings = $settings;
         $this->possessionCalculator = $possessionCalculator;
-        $this->report = new MatchReport();
+        $this->report = $matchReport;
+        $this->shootEngine = $shootEngine;
     }
 
     /**
      * Play match
      *
+     * @param Team $homeTeam
+     * @param Team $awayTeam
      * @return MatchReport
      * @throws EngineException
      */
-    public function play(): MatchReport
+    public function play(Team $homeTeam, Team $awayTeam): MatchReport
     {
         if ($this->isPlayed) {
             throw new EngineException('Match already played');
         }
+
+        $this->homeTeam = $homeTeam;
+        $this->awayTeam = $awayTeam;
 
         $this->homeTeam->perform($this->settings->performanceRandomRange);
         $this->awayTeam->perform($this->settings->performanceRandomRange);
@@ -126,9 +133,17 @@ class Match
 
         // home team shoots
         if ($this->homeTeamShootCount) {
+            $saveBonus = 0;
             for ($i = $this->homeTeamShootCount; $i > 0; $i--) {
                 $config = $this->buildShootConfig($this->homeTeam, $this->awayTeam);
-                $shootResult = $this->shoot($config);
+                $config->saveBonus = $saveBonus;
+                $shootResult = $this->shootEngine->shoot($config);
+
+                if ($shootResult->isGoal()) {
+                    $saveBonus = ($saveBonus <= -2) ? 0 : $saveBonus + 2;
+                } else {
+                    $saveBonus = ($saveBonus >= 2) ? 0 : $saveBonus - 2;
+                }
 
                 if ($shootResult->isGoal()) {
                     $this->report->homeScore += 1;
@@ -138,9 +153,17 @@ class Match
 
         // away team shoots
         if ($this->homeTeamShootCount) {
+            $saveBonus = 0;
             for ($i = $this->homeTeamShootCount; $i > 0; $i--) {
                 $config = $this->buildShootConfig($this->awayTeam, $this->homeTeam);
-                $shootResult = $this->shoot($config);
+                $config->saveBonus = $saveBonus;
+                $shootResult = $this->shootEngine->shoot($config);
+
+                if ($shootResult->isGoal()) {
+                    $saveBonus = ($saveBonus <= -2) ? 0 : $saveBonus - 1;
+                } else {
+                    $saveBonus = ($saveBonus >= 2) ? 0 : $saveBonus + 1;
+                }
 
                 if ($shootResult->isGoal()) {
                     $this->report->awayScore += 1;
@@ -178,56 +201,6 @@ class Match
         $config->goalkeeper = $goalkeeper;
 
         return $config;
-    }
-
-    /**
-     * Calculate shoot result
-     *
-     * @param ShootConfig $shootConfig
-     * @return ShootResult
-     */
-    private function shoot(ShootConfig $shootConfig): ShootResult
-    {
-        $strikerPref = $shootConfig->striker->getPerformance();
-        $goalkeeperPref = $shootConfig->goalkeeper->getPerformance();
-
-        $attackHelperPref = $shootConfig->attackHelper ? $shootConfig->attackHelper->getPerformance() : 0;
-        $defenseHelperPref = $shootConfig->defenseHelper ? $shootConfig->defenseHelper->getPerformance() : 0;
-
-        $goalK = round($strikerPref * $strikerPref / ($strikerPref * $strikerPref + $goalkeeperPref * $goalkeeperPref), 2);
-
-        $helperBonus = 0;
-        if ($shootConfig->attackHelper && $shootConfig->defenseHelper) { // both helpers
-            $helperBonus = round(($attackHelperPref / ($attackHelperPref + $defenseHelperPref) - 0.5), 2);
-        } elseif ($shootConfig->attackHelper && !$shootConfig->defenseHelper) {
-            $helperBonus = round($attackHelperPref / ($goalkeeperPref * 2.5), 2);
-        } elseif (!$shootConfig->attackHelper && $shootConfig->defenseHelper) {
-            $helperBonus = round($defenseHelperPref / ($strikerPref * 2.5), 2);
-        }
-
-        $goalK += $helperBonus;
-        $saveK = round(0.5 + rand(-7, 7) / 100, 2);
-
-        $goal = $goalK - $this->saveBonus * 0.05 > $saveK;
-
-        if ($goal) {
-            if ($this->saveBonus <= -2) {
-                $this->saveBonus = 0;
-            } else {
-                $this->saveBonus -= 1;
-            }
-        } else {
-            if ($this->saveBonus >= 2) {
-                $this->saveBonus = 0;
-            } else {
-                $this->saveBonus += 1;
-            }
-        }
-
-        $resultType = $goal ? ShootResult::RESULT_GOAL : ShootResult::RESULT_SAVE;
-        $result = new ShootResult($resultType, $shootConfig);
-
-        return $result;
     }
 
     /**

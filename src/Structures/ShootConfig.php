@@ -15,4 +15,7 @@ class ShootConfig
 
     /** @var Player|null */
     public $defenseHelper;
+
+    /** @var int */
+    public $saveBonus = 0;
 }

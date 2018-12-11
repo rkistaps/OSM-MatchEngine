@@ -2,6 +2,9 @@
 
 namespace rkistaps\Engine\Classes;
 
+use DI\ContainerBuilder;
+use DI\DependencyException;
+use DI\NotFoundException;
 use rkistaps\Engine\Exceptions\EngineException;
 use rkistaps\Engine\Structures\MatchSettings;
 use rkistaps\Engine\Structures\Team;
@@ -33,12 +36,15 @@ class MatchEngine
      * @param Team $awayTeam
      * @return Match
      * @throws EngineException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function play(Team $homeTeam, Team $awayTeam): Match
     {
-        $match = new Match($homeTeam, $awayTeam, $this->settings, $this->possessionCalculator);
+        $container = ContainerBuilder::buildDevContainer();
+        $match = $container->get(Match::class);
 
-        $match->play();
+        $match->play($homeTeam, $awayTeam);
 
         return $match;
     }
