@@ -42,7 +42,6 @@ class SquadStrength
         $modifier->apply($this);
     }
 
-
     /**
      * Apply tactic
      *

@@ -18,4 +18,7 @@ class ShootConfig
 
     /** @var int */
     public $saveBonus = 0;
+
+    /** @var int */
+    public $randomModifier = 7;
 }

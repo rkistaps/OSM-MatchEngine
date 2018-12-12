@@ -33,7 +33,7 @@ class ShootEngine
         }
 
         $goalK += $helperBonus;
-        $saveK = round(0.5 + rand(-7, 7) / 100, 2);
+        $saveK = round(0.5 + rand($shootConfig->randomModifier * (-1), $shootConfig->randomModifier) / 100, 2);
 
         $saveBonusK = $shootConfig->saveBonus * 0.05;
 
