@@ -13,7 +13,7 @@ use rkistaps\Engine\Structures\Player;
 use rkistaps\Engine\Structures\ShootConfig;
 use rkistaps\Engine\Structures\ShootResult;
 
-class ShootEngineTest extends BaseTest
+class ShootEngineTest extends TestBase
 {
     /**
      * Generic shoot test

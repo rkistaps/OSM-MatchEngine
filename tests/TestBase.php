@@ -11,7 +11,7 @@ use rkistaps\Engine\Exceptions\EngineException;
 use rkistaps\Engine\Helpers\PlayerBuilder;
 use rkistaps\Engine\Structures\Player;
 
-abstract class BaseTest extends TestCase
+abstract class TestBase extends TestCase
 {
     /** @var Container */
     protected $container;
