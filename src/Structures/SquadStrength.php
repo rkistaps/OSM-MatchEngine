@@ -2,21 +2,22 @@
 
 namespace rkistaps\Engine\Structures;
 
+use rkistaps\Engine\Interfaces\SquadStrengthModifierInterface;
 use rkistaps\Engine\Interfaces\TacticInterface;
 
 class SquadStrength
 {
     /** @var int */
-    private $goalkeeper = 0;
+    public $goalkeeper = 0;
 
     /** @var float */
-    private $defence = 0;
+    public $defence = 0;
 
     /** @var float */
-    private $midfield = 0;
+    public $midfield = 0;
 
     /** @var float */
-    private $attack = 0;
+    public $attack = 0;
 
     /**
      * SquadStrength constructor.
@@ -34,77 +35,13 @@ class SquadStrength
     }
 
     /**
-     * @return float
+     * @param SquadStrengthModifierInterface $modifier
      */
-    public function getGoalkeeper(): float
+    public function applyModifier(SquadStrengthModifierInterface $modifier)
     {
-        return $this->goalkeeper;
+        $modifier->apply($this);
     }
 
-    /**
-     * @return float
-     */
-    public function getDefense(): float
-    {
-        return $this->defence;
-    }
-
-    /**
-     * @return float
-     */
-    public function getMidfield(): float
-    {
-        return $this->midfield;
-    }
-
-    /**
-     * @return float
-     */
-    public function getAttack(): float
-    {
-        return $this->attack;
-    }
-
-    /**
-     * Return strength
-     *
-     * @return array
-     */
-    public function get(): array
-    {
-        return [
-            $this->goalkeeper,
-            $this->defence,
-            $this->midfield,
-            $this->attack,
-        ];
-    }
-
-    /**
-     * Modify strength by multiplying modifier values
-     *
-     * @param SquadStrengthModifier $modifier
-     */
-    public function modify(SquadStrengthModifier $modifier)
-    {
-        $this->goalkeeper = $this->goalkeeper * $modifier->goalkeeperModifier;
-        $this->defence = $this->defence * $modifier->defenseModifier;
-        $this->midfield = $this->midfield * $modifier->midfieldModifier;
-        $this->attack = $this->attack * $modifier->attackModifier;
-    }
-
-    /**
-     * Modify strength by adding modifier values
-     *
-     * @param SquadStrengthModifier $modifier
-     */
-    public function modifyFlat(SquadStrengthModifier $modifier)
-    {
-        $this->goalkeeper = $this->goalkeeper + $modifier->goalkeeperModifier;
-        $this->defence = $this->defence + $modifier->defenseModifier;
-        $this->midfield = $this->midfield + $modifier->midfieldModifier;
-        $this->attack = $this->attack + $modifier->attackModifier;
-    }
 
     /**
      * Apply tactic

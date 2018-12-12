@@ -6,12 +6,13 @@ use rkistaps\Engine\Exceptions\EngineException;
 use rkistaps\Engine\Helpers\LineupHelper;
 use rkistaps\Engine\Structures\Coach;
 use rkistaps\Engine\Structures\Event;
+use rkistaps\Engine\Structures\FlatSquadStrengthModifier;
 use rkistaps\Engine\Structures\MatchSettings;
 use rkistaps\Engine\Structures\MatchReport;
 use rkistaps\Engine\Structures\Player;
 use rkistaps\Engine\Structures\Possession;
+use rkistaps\Engine\Structures\RelativeSquadStrengthModifier;
 use rkistaps\Engine\Structures\ShootConfig;
-use rkistaps\Engine\Structures\SquadStrengthModifier;
 use rkistaps\Engine\Structures\Team;
 
 class Match
@@ -107,13 +108,13 @@ class Match
 
         // TODO add additional attack count calculation
 
-        $htDefStr = $homeTeamStrength->getDefense();
-        $htMidStr = $homeTeamStrength->getMidfield();
-        $htAttStr = $homeTeamStrength->getAttack();
+        $htDefStr = $homeTeamStrength->defence;
+        $htMidStr = $homeTeamStrength->midfield;
+        $htAttStr = $homeTeamStrength->attack;
 
-        $atDefStr = $awayTeamStrength->getDefense();
-        $atMidStr = $awayTeamStrength->getMidfield();
-        $atAttStr = $awayTeamStrength->getAttack();
+        $atDefStr = $awayTeamStrength->defence;
+        $atMidStr = $awayTeamStrength->midfield;
+        $atAttStr = $awayTeamStrength->attack;
 
         $this->homeTeamShootCount = round(($htAttStr + $htMidStr * 0.33) / ($atDefStr + $atMidStr * 0.33) * $this->homeTeamAttackCount);
         $this->awayTeamShootCount = round(($atAttStr + $atMidStr * 0.33) / ($htDefStr + $htMidStr * 0.33) * $this->awayTeamAttackCount);
@@ -231,11 +232,11 @@ class Match
     private function modifyStrengths()
     {
         if ($this->settings->hasHomeTeamBonus) {
-            $modifier = new SquadStrengthModifier();
+            $modifier = new RelativeSquadStrengthModifier();
             $modifier->defenseModifier = $this->settings->homeTeamBonus;
             $modifier->midfieldModifier = $this->settings->homeTeamBonus;
             $modifier->attackModifier = $this->settings->homeTeamBonus;
-            $this->homeTeam->getStrength()->modify($modifier);
+            $this->homeTeam->getStrength()->applyModifier($modifier);
         }
 
         // modify by coach
@@ -271,12 +272,12 @@ class Match
             $attackModifier *= $this->settings->coachSpecialityBonus;
         }
 
-        $modifier = new SquadStrengthModifier();
+        $modifier = new FlatSquadStrengthModifier();
         $modifier->defenseModifier = $defenseModifier;
         $modifier->midfieldModifier = $midfieldModifier;
         $modifier->attackModifier = $attackModifier;
 
-        $team->getStrength()->modify($modifier);
+        $team->getStrength()->applyModifier($modifier);
     }
 
     /**
