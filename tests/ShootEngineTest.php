@@ -52,6 +52,9 @@ class ShootEngineTest extends TestBase
         $config->goalkeeper->perform(0);
         $config->striker->perform(0);
 
+        // no random in tests
+        $config->randomModifier = 0;
+
         $shootEngine = $this->container->get(ShootEngine::class);
         $result = $shootEngine->shoot($config);
 
@@ -75,6 +78,9 @@ class ShootEngineTest extends TestBase
 
         $config->goalkeeper->perform(0);
         $config->striker->perform(0);
+
+        // no random in tests
+        $config->randomModifier = 0;
 
         $shootEngine = $this->container->get(ShootEngine::class);
         $result = $shootEngine->shoot($config);
