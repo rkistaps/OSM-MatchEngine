@@ -2,41 +2,67 @@
 
 namespace Engine\Tests;
 
-use DI\DependencyException;
-use DI\NotFoundException;
 use rkistaps\Engine\Classes\PossessionCalculator;
-use rkistaps\Engine\Structures\FlatSquadStrengthModifier;
 use rkistaps\Engine\Structures\Possession;
+use rkistaps\Engine\Structures\Settings\PossessionCalculatorSettings;
 use rkistaps\Engine\Structures\SquadStrength;
 
 class PossessionCalculatorTest extends TestBase
 {
     /**
      * Generic test
-     *
-     * @throws DependencyException
-     * @throws NotFoundException
      */
     public function testGenericCalculator()
     {
-        $calculator = $this->container->get(PossessionCalculator::class);
-        $modifier = $this->container->get(FlatSquadStrengthModifier::class);
+        $posCalcSettings = new PossessionCalculatorSettings();
+        $posCalcSettings->randomRange = 0; // no random in tests
 
-        $modifier->goalkeeperModifier = 1;
-        $modifier->defenseModifier = 1;
-        $modifier->midfieldModifier = 1;
-        $modifier->attackModifier = 1;
+        $str = 10;
+        $homeTeamStr = $this->getSquadStrength($str);
+        $awayTeamStr = $this->getSquadStrength($str);
 
-        /** @var SquadStrength $homeTeamStr */
-        $homeTeamStr = $this->container->make(SquadStrength::class);
-        $homeTeamStr->applyModifier($modifier);
-
-        /** @var SquadStrength $awayTeamStr */
-        $awayTeamStr = $this->container->make(SquadStrength::class);
-        $awayTeamStr->applyModifier($modifier);
-
+        $calculator = new PossessionCalculator($posCalcSettings);
         $possession = $calculator->calculate($homeTeamStr, $awayTeamStr);
 
         $this->assertInstanceOf(Possession::class, $possession);
+        $this->assertEquals(1, $possession->homeTeam + $possession->awayTeam);
+        $this->assertTrue($possession->homeTeam === $possession->awayTeam);
+
+    }
+
+    /**
+     * Generic test
+     */
+    public function testDifferentStrengths()
+    {
+        $posCalcSettings = new PossessionCalculatorSettings();
+        $posCalcSettings->randomRange = 0; // no random in tests
+
+        $str = 10;
+        $homeTeamStr = $this->getSquadStrength($str);
+        $awayTeamStr = $this->getSquadStrength(($str * 2));
+
+        $calculator = new PossessionCalculator($posCalcSettings);
+        $possession = $calculator->calculate($homeTeamStr, $awayTeamStr);
+
+        $this->assertEquals(0.2, $possession->homeTeam);
+        $this->assertEquals(0.8, $possession->awayTeam);
+    }
+
+    /**
+     * Get SquadStrength for tests
+     *
+     * @param int $str
+     * @return SquadStrength
+     */
+    private function getSquadStrength(int $str): SquadStrength
+    {
+        $squadStr = new SquadStrength;
+        $squadStr->goalkeeper = $str;
+        $squadStr->defence = $str;
+        $squadStr->midfield = $str;
+        $squadStr->attack = $str;
+
+        return $squadStr;
     }
 }

@@ -41,9 +41,6 @@ try {
         /** @var Match $match */
         $match = $container->make(Match::class);
 
-        $homeTeam->perform(0);
-        $awayTeam->perform(0);
-
         $report = $match->play($homeTeam, $awayTeam, $settings);
 
         if ($report->homeScore > $report->awayScore) {
