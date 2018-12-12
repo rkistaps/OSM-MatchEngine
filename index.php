@@ -4,6 +4,7 @@ use rkistaps\Engine\Classes\Match;
 use rkistaps\Engine\Exceptions\EngineException;
 use rkistaps\Engine\Helpers\LineupBuilder;
 use rkistaps\Engine\Structures\Coach;
+use rkistaps\Engine\Structures\MatchSettings;
 use rkistaps\Engine\Structures\Tactics\TowardsMiddle;
 use rkistaps\Engine\Structures\Team;
 
@@ -25,15 +26,19 @@ try {
     $awayTeam = new Team(uniqid(), $awayTeamLineup, $awayTeamTactic);
 
     $coach = new Coach(Coach::SPECIALITY_ATT, 1);
-//    $homeTeam->setCoach($coach);
+    $homeTeam->setCoach($coach);
 
     $coach = new Coach(Coach::SPECIALITY_ATT, 1);
-//    $awayTeam->setCoach($coach);
+    $awayTeam->setCoach($coach);
+
+    $settings = $container->get(MatchSettings::class);
 
     $games = 500;
     for ($i = 0; $i <= $games - 1; $i++) {
+        /** @var Match $match */
         $match = $container->make(Match::class);
-        $result = $match->play($homeTeam, $awayTeam);
+
+        $result = $match->play($homeTeam, $awayTeam, $settings);
 
         if ($result->homeScore > $result->awayScore) {
             $homeTeamWins++;

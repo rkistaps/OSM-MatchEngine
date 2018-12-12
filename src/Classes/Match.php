@@ -60,14 +60,12 @@ class Match
     /**
      * Match constructor.
      *
-     * @param MatchSettings $settings
      * @param PossessionCalculator $possessionCalculator
      * @param MatchReport $matchReport
      * @param ShootEngine $shootEngine
      */
-    public function __construct(MatchSettings $settings, PossessionCalculator $possessionCalculator, MatchReport $matchReport, ShootEngine $shootEngine)
+    public function __construct(PossessionCalculator $possessionCalculator, MatchReport $matchReport, ShootEngine $shootEngine)
     {
-        $this->settings = $settings;
         $this->possessionCalculator = $possessionCalculator;
         $this->report = $matchReport;
         $this->shootEngine = $shootEngine;
@@ -78,14 +76,17 @@ class Match
      *
      * @param Team $homeTeam
      * @param Team $awayTeam
+     * @param MatchSettings $settings
      * @return MatchReport
      * @throws EngineException
      */
-    public function play(Team $homeTeam, Team $awayTeam): MatchReport
+    public function play(Team $homeTeam, Team $awayTeam, MatchSettings $settings): MatchReport
     {
         if ($this->isPlayed) {
             throw new EngineException('Match already played');
         }
+
+        $this->settings = $settings;
 
         $this->homeTeam = $homeTeam;
         $this->awayTeam = $awayTeam;

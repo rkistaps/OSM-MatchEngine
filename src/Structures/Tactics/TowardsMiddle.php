@@ -3,8 +3,8 @@
 namespace rkistaps\Engine\Structures\Tactics;
 
 use rkistaps\Engine\Interfaces\TacticInterface;
+use rkistaps\Engine\Structures\FlatSquadStrengthModifier;
 use rkistaps\Engine\Structures\SquadStrength;
-use rkistaps\Engine\Structures\SquadStrengthModifier;
 
 class TowardsMiddle implements TacticInterface
 {
@@ -18,10 +18,10 @@ class TowardsMiddle implements TacticInterface
      */
     public function apply(SquadStrength $strength)
     {
-        $modifier = new SquadStrengthModifier();
+        $modifier = new FlatSquadStrengthModifier();
 
-        $attack = $strength->getAttack();
-        $defense = $strength->getDefense();
+        $attack = $strength->attack;
+        $defense = $strength->defence;
 
         $attackModifier = floor($attack * TowardsMiddle::MODIFIER / 100);
         $defenseModifier = floor($defense * TowardsMiddle::MODIFIER / 100);
@@ -31,6 +31,6 @@ class TowardsMiddle implements TacticInterface
         $modifier->midfieldModifier = $midfieldModifier;
         $modifier->attackModifier = $attackModifier * (-1);
 
-        $strength->modifyFlat($modifier);
+        $strength->applyModifier($modifier);
     }
 }
