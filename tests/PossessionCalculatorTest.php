@@ -5,9 +5,9 @@ namespace Engine\Tests;
 use DI\DependencyException;
 use DI\NotFoundException;
 use rkistaps\Engine\Classes\PossessionCalculator;
+use rkistaps\Engine\Structures\FlatSquadStrengthModifier;
 use rkistaps\Engine\Structures\Possession;
 use rkistaps\Engine\Structures\SquadStrength;
-use rkistaps\Engine\Structures\RelativeSquadStrengthModifier;
 
 class PossessionCalculatorTest extends TestBase
 {
@@ -20,7 +20,7 @@ class PossessionCalculatorTest extends TestBase
     public function testGenericCalculator()
     {
         $calculator = $this->container->get(PossessionCalculator::class);
-        $modifier = $this->container->get(RelativeSquadStrengthModifier::class);
+        $modifier = $this->container->get(FlatSquadStrengthModifier::class);
 
         $modifier->goalkeeperModifier = 1;
         $modifier->defenseModifier = 1;
@@ -29,11 +29,11 @@ class PossessionCalculatorTest extends TestBase
 
         /** @var SquadStrength $homeTeamStr */
         $homeTeamStr = $this->container->make(SquadStrength::class);
-        $homeTeamStr->modifyFlat($modifier);
+        $homeTeamStr->applyModifier($modifier);
 
         /** @var SquadStrength $awayTeamStr */
         $awayTeamStr = $this->container->make(SquadStrength::class);
-        $awayTeamStr->modifyFlat($modifier);
+        $awayTeamStr->applyModifier($modifier);
 
         $possession = $calculator->calculate($homeTeamStr, $awayTeamStr);
 

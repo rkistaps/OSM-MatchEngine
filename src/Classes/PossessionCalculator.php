@@ -30,8 +30,8 @@ class PossessionCalculator
      */
     public function calculate(SquadStrength $homeTeamStrength, SquadStrength $awayTeamStrength): Possession
     {
-        $homeTeamMidStrength = $homeTeamStrength->getMidfield();
-        $awayTeamMidStrength = $awayTeamStrength->getMidfield();
+        $homeTeamMidStrength = $homeTeamStrength->midfield;
+        $awayTeamMidStrength = $awayTeamStrength->midfield;
 
         $homeTeamK = $homeTeamMidStrength * 2 / $awayTeamMidStrength;
         $awayTeamK = $awayTeamMidStrength * 2 / $homeTeamMidStrength;
