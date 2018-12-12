@@ -85,4 +85,25 @@ class Lineup
 
         return $lineup;
     }
+
+    /**
+     * Get lineup formation
+     *
+     * @return string
+     */
+    public function getFormation(): string
+    {
+        $d = $m = $f = 0;
+        foreach ($this->players as $player) {
+            if ($player->getPosition() == Player::POS_D) {
+                $d++;
+            } elseif ($player->getPosition() == Player::POS_M) {
+                $m++;
+            } elseif ($player->getPosition() == Player::POS_F) {
+                $f++;
+            }
+        }
+
+        return $d . '-' . $m . '-' . $f;
+    }
 }

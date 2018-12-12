@@ -4,6 +4,15 @@ namespace rkistaps\Engine\Structures;
 
 class ShootConfig
 {
+    /** @var int */
+    public $minute = 0;
+
+    /** @var string */
+    public $attackingTeamId;
+
+    /** @var string */
+    public $defendingTeamId;
+
     /** @var Player */
     public $striker;
 

@@ -53,6 +53,16 @@ class Player
     }
 
     /**
+     * Get Player id
+     *
+     * @return int|string
+     */
+    public function getId()
+    {
+        return $this->attributes->id;
+    }
+
+    /**
      * Get players position
      *
      * @return string

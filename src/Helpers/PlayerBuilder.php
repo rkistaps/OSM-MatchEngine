@@ -27,6 +27,8 @@ class PlayerBuilder
             'energy' => $energy
         ]);
 
+//        var_dump($attributes);
+
         return new Player($attributes);
     }
 }

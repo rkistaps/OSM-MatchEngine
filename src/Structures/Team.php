@@ -27,6 +27,7 @@ class Team
     /**
      * Set squad lineup
      *
+     * @param string $id
      * @param Lineup $lineup
      * @param TacticInterface $tactic
      * @throws EngineException
@@ -108,13 +109,17 @@ class Team
     }
 
     /**
-     * Preform
+     * Calculate performances
+     *
      * @param int $performanceRandomRange
+     * @return SquadStrength
      */
-    public function perform(int $performanceRandomRange)
+    public function perform(int $performanceRandomRange): SquadStrength
     {
         $this->lineup->perform($performanceRandomRange);
         $this->strength = $this->calculateStrength();
+
+        return $this->strength;
     }
 
     /**

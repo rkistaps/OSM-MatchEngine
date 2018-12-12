@@ -2,7 +2,6 @@
 
 namespace rkistaps\Engine\Classes;
 
-use rkistaps\Engine\Exceptions\EngineException;
 use rkistaps\Engine\Helpers\LineupHelper;
 use rkistaps\Engine\Structures\Coach;
 use rkistaps\Engine\Structures\Event;
@@ -10,64 +9,28 @@ use rkistaps\Engine\Structures\FlatSquadStrengthModifier;
 use rkistaps\Engine\Structures\MatchSettings;
 use rkistaps\Engine\Structures\MatchReport;
 use rkistaps\Engine\Structures\Player;
-use rkistaps\Engine\Structures\Possession;
 use rkistaps\Engine\Structures\RelativeSquadStrengthModifier;
 use rkistaps\Engine\Structures\ShootConfig;
+use rkistaps\Engine\Structures\SquadStrength;
 use rkistaps\Engine\Structures\Team;
 
 class Match
 {
-    /** @var Team */
-    private $homeTeam;
-
-    /** @var Team */
-    private $awayTeam;
-
-    /** @var MatchSettings */
-    private $settings;
-
-    /** @var MatchReport */
-    private $report;
-
-    /** @var bool */
-    private $isPlayed = false;
-
-    /** @var Possession */
-    private $possession;
-
-    /** @var int */
-    private $homeTeamAttackCount = 0;
-
-    /** @var int */
-    private $awayTeamAttackCount = 0;
-
-    /** @var int */
-    private $homeTeamShootCount = 0;
-
-    /** @var int */
-    private $awayTeamShootCount = 0;
-
     /** @var PossessionCalculator */
     private $possessionCalculator;
 
-    /** @var int */
-    private $saveBonus = 0;
-
     /** @var ShootEngine */
     private $shootEngine;
-
 
     /**
      * Match constructor.
      *
      * @param PossessionCalculator $possessionCalculator
-     * @param MatchReport $matchReport
      * @param ShootEngine $shootEngine
      */
-    public function __construct(PossessionCalculator $possessionCalculator, MatchReport $matchReport, ShootEngine $shootEngine)
+    public function __construct(PossessionCalculator $possessionCalculator, ShootEngine $shootEngine)
     {
         $this->possessionCalculator = $possessionCalculator;
-        $this->report = $matchReport;
         $this->shootEngine = $shootEngine;
     }
 
@@ -78,34 +41,29 @@ class Match
      * @param Team $awayTeam
      * @param MatchSettings $settings
      * @return MatchReport
-     * @throws EngineException
      */
     public function play(Team $homeTeam, Team $awayTeam, MatchSettings $settings): MatchReport
     {
-        if ($this->isPlayed) {
-            throw new EngineException('Match already played');
+        $report = new MatchReport();
+
+        $homeTeamStrength = $homeTeam->perform($settings->performanceRandomRange);
+        $awayTeamStrength = $awayTeam->perform($settings->performanceRandomRange);
+
+        $this->modifyStrengths($homeTeam, $settings);
+        $this->modifyStrengths($awayTeam, $settings);
+
+        if ($settings->hasHomeTeamBonus) {
+            $this->applyHomeTeamBonus($homeTeamStrength, $settings);
         }
 
-        $this->settings = $settings;
+        $possession = $this->possessionCalculator->calculate($homeTeamStrength, $awayTeamStrength);
+        $report->possession = $possession;
 
-        $this->homeTeam = $homeTeam;
-        $this->awayTeam = $awayTeam;
+        $baseAttackCount = $settings->baseAttackCount;
+        $attackCountRandomModifier = rand(100 - $settings->attackCountRandomModifier, 100 + $settings->attackCountRandomModifier) / 100;
 
-        $this->homeTeam->perform($this->settings->performanceRandomRange);
-        $this->awayTeam->perform($this->settings->performanceRandomRange);
-        $this->modifyStrengths();
-
-        $homeTeamStrength = $this->homeTeam->getStrength();
-        $awayTeamStrength = $this->awayTeam->getStrength();
-
-        $this->possession = $this->possessionCalculator->calculate($homeTeamStrength, $awayTeamStrength);
-
-        $possession = $this->possession;
-        $baseAttackCount = $this->settings->baseAttackCount;
-        $attackCountRandomModifier = rand(100 - $this->settings->attackCountRandomModifier, 100 + $this->settings->attackCountRandomModifier) / 100;
-
-        $this->homeTeamAttackCount = round($baseAttackCount * $possession->homeTeam * $attackCountRandomModifier);
-        $this->awayTeamAttackCount = round($baseAttackCount * $possession->awayTeam * $attackCountRandomModifier);
+        $report->homeTeamAttackCount = round($baseAttackCount * $possession->homeTeam * $attackCountRandomModifier);
+        $report->awayTeamAttackCount = round($baseAttackCount * $possession->awayTeam * $attackCountRandomModifier);
 
         // TODO add additional attack count calculation
 
@@ -117,65 +75,77 @@ class Match
         $atMidStr = $awayTeamStrength->midfield;
         $atAttStr = $awayTeamStrength->attack;
 
-        $this->homeTeamShootCount = round(($htAttStr + $htMidStr * 0.33) / ($atDefStr + $atMidStr * 0.33) * $this->homeTeamAttackCount);
-        $this->awayTeamShootCount = round(($atAttStr + $atMidStr * 0.33) / ($htDefStr + $htMidStr * 0.33) * $this->awayTeamAttackCount);
+        $report->homeTeamShootCount = round(($htAttStr + $htMidStr * 0.33) / ($atDefStr + $atMidStr * 0.33) * $report->homeTeamAttackCount);
+        $report->awayTeamShootCount = round(($atAttStr + $atMidStr * 0.33) / ($htDefStr + $htMidStr * 0.33) * $report->awayTeamAttackCount);
 
-        $this->homeTeamShootCount = $this->homeTeamShootCount < $this->homeTeamAttackCount ? $this->homeTeamShootCount : $this->homeTeamAttackCount;
-        $this->awayTeamShootCount = $this->awayTeamShootCount < $this->awayTeamAttackCount ? $this->awayTeamShootCount : $this->awayTeamAttackCount;
+        $report->homeTeamShootCount = $report->homeTeamShootCount > $report->homeTeamAttackCount ? $report->homeTeamAttackCount : $report->homeTeamShootCount;
+        $report->awayTeamShootCount = $report->awayTeamShootCount > $report->awayTeamAttackCount ? $report->awayTeamAttackCount : $report->awayTeamShootCount;
 
-        $htAttacksStopped = $this->homeTeamAttackCount - $this->homeTeamShootCount;
+        $htAttacksStopped = $report->homeTeamAttackCount - $report->homeTeamShootCount;
         if ($htAttacksStopped) {
-            $this->addAttackStopEvents($htAttacksStopped, $this->homeTeam, $this->awayTeam);
+            $this->addAttackStopEvents($htAttacksStopped, $homeTeam, $awayTeam, $report);
         }
 
-        $atAttacksStopped = $this->awayTeamAttackCount - $this->awayTeamShootCount;
+        $atAttacksStopped = $report->awayTeamAttackCount - $report->awayTeamShootCount;
         if ($atAttacksStopped) {
-            $this->addAttackStopEvents($atAttacksStopped, $this->awayTeam, $this->homeTeam);
+            $this->addAttackStopEvents($atAttacksStopped, $awayTeam, $homeTeam, $report);
         }
 
         // home team shoots
-        if ($this->homeTeamShootCount) {
-            $saveBonus = 0;
-            for ($i = $this->homeTeamShootCount; $i > 0; $i--) {
-                $config = $this->buildShootConfig($this->homeTeam, $this->awayTeam);
-                $config->saveBonus = $saveBonus;
-                $shootResult = $this->shootEngine->shoot($config);
+        if ($report->homeTeamShootCount) {
+            $events = $this->processShoots($homeTeam, $awayTeam, $report->homeTeamShootCount);
+            $report->addEvents($events);
 
-                if ($shootResult->isGoal()) {
-                    $saveBonus = ($saveBonus <= -2) ? 0 : $saveBonus + 1;
-                } else {
-                    $saveBonus = ($saveBonus >= 2) ? 0 : $saveBonus - 1;
-                }
-
-                if ($shootResult->isGoal()) {
-                    $this->report->homeScore += 1;
+            foreach ($events as $event) {
+                if ($event->getType() == Event::TYPE_GOAL) {
+                    $report->homeScore += 1;
                 }
             }
         }
 
         // away team shoots
-        if ($this->awayTeamShootCount) {
-            $saveBonus = 0;
-            for ($i = $this->awayTeamShootCount; $i > 0; $i--) {
-                $config = $this->buildShootConfig($this->awayTeam, $this->homeTeam);
-                $config->saveBonus = $saveBonus;
-                $shootResult = $this->shootEngine->shoot($config);
+        if ($report->awayTeamShootCount) {
+            $events = $this->processShoots($awayTeam, $homeTeam, $report->awayTeamShootCount);
+            $report->addEvents($events);
 
-                if ($shootResult->isGoal()) {
-                    $saveBonus = ($saveBonus <= -2) ? 0 : $saveBonus + 1;
-                } else {
-                    $saveBonus = ($saveBonus >= 2) ? 0 : $saveBonus - 1;
-                }
-
-                if ($shootResult->isGoal()) {
-                    $this->report->awayScore += 1;
+            foreach ($events as $event) {
+                if ($event->getType() == Event::TYPE_GOAL) {
+                    $report->awayScore += 1;
                 }
             }
         }
 
-        $this->isPlayed = true;
+        return $report;
+    }
 
-        return $this->report;
+    /**
+     * Process shoots
+     *
+     * @param Team $attackingTeam
+     * @param Team $defendingTeam
+     * @param int $count
+     * @return Event[]
+     */
+    private function processShoots(Team $attackingTeam, Team $defendingTeam, int $count): array
+    {
+        $events = [];
+
+        $saveBonus = 0;
+        for ($i = $count; $i > 0; $i--) {
+            $config = $this->buildShootConfig($attackingTeam, $defendingTeam);
+            $config->saveBonus = $saveBonus;
+            $shootResult = $this->shootEngine->shoot($config);
+
+            if ($shootResult->isGoal()) {
+                $saveBonus = ($saveBonus <= -2) ? 0 : $saveBonus + 1;
+            } else {
+                $saveBonus = ($saveBonus >= 2) ? 0 : $saveBonus - 1;
+            }
+
+            $events[] = Event::fromShootResult($shootResult);
+        }
+
+        return $events;
     }
 
     /**
@@ -195,10 +165,16 @@ class Match
             $pos = Player::POS_D;
         }
 
-        $striker = LineupHelper::getRandomPlayerInPosition($attackingTeam->getLineup(), $pos, 1);
-        $goalkeeper = LineupHelper::getRandomPlayerInPosition($defendingTeam->getLineup(), Player::POS_G, 1);
+        $minute = rand(1, 93);
+
+        $striker = LineupHelper::getRandomPlayerInPosition($attackingTeam->getLineup(), $pos, $minute);
+        $goalkeeper = LineupHelper::getRandomPlayerInPosition($defendingTeam->getLineup(), Player::POS_G, $minute);
 
         $config = new ShootConfig();
+
+        $config->minute = $minute;
+        $config->attackingTeamId = $attackingTeam->getId();
+        $config->defendingTeamId = $defendingTeam->getId();
         $config->striker = $striker;
         $config->goalkeeper = $goalkeeper;
 
@@ -211,8 +187,9 @@ class Match
      * @param int $count
      * @param Team $attackingTeam
      * @param Team $defendingTeam
+     * @param MatchReport $report
      */
-    private function addAttackStopEvents(int $count, Team $attackingTeam, Team $defendingTeam)
+    private function addAttackStopEvents(int $count, Team $attackingTeam, Team $defendingTeam, MatchReport $report)
     {
         for ($i = $count; $i > 0; $i--) {
             $minute = rand(1, 93);
@@ -223,54 +200,57 @@ class Match
             ];
 
             $event = new Event(Event::TYPE_TACKLE, $minute, $data);
-            $this->report->addEvent($event);
+            $report->addEvent($event);
         }
     }
 
     /**
      * Modify team strengths based on multiple factors
+     *
+     * @param Team $team
+     * @param MatchSettings $settings
      */
-    private function modifyStrengths()
+    private function modifyStrengths(Team $team, MatchSettings $settings)
     {
-        if ($this->settings->hasHomeTeamBonus) {
-            $modifier = new RelativeSquadStrengthModifier();
-            $modifier->defenseModifier = $this->settings->homeTeamBonus;
-            $modifier->midfieldModifier = $this->settings->homeTeamBonus;
-            $modifier->attackModifier = $this->settings->homeTeamBonus;
-            $this->homeTeam->getStrength()->applyModifier($modifier);
-        }
-
         // modify by coach
-        $this->modifyStrengthByCoach($this->homeTeam);
-        $this->modifyStrengthByCoach($this->awayTeam);
+        $this->modifyStrengthByCoach($team, $settings);
 
-        $this->homeTeam->getStrength()->applyTactic($this->homeTeam->getTactic());
-        $this->awayTeam->getStrength()->applyTactic($this->awayTeam->getTactic());
+        $team->getStrength()->applyTactic($team->getTactic());
+    }
+
+    private function applyHomeTeamBonus(SquadStrength $strength, MatchSettings $settings)
+    {
+        $modifier = new RelativeSquadStrengthModifier();
+        $modifier->defenseModifier = $settings->homeTeamBonus;
+        $modifier->midfieldModifier = $settings->homeTeamBonus;
+        $modifier->attackModifier = $settings->homeTeamBonus;
+        $strength->applyModifier($modifier);
     }
 
     /**
      * Modify team strength based on coach
      *
      * @param Team $team
+     * @param MatchSettings $settings
      */
-    public function modifyStrengthByCoach(Team $team)
+    public function modifyStrengthByCoach(Team $team, MatchSettings $settings)
     {
         $coach = $team->getCoach();
         if (!$coach) {
             return;
         }
-        $levelBonus = $this->settings->coachLevelBonus * $coach->getLevel();
+        $levelBonus = $settings->coachLevelBonus * $coach->getLevel();
 
         $defenseModifier = $levelBonus;
         $midfieldModifier = $levelBonus;
         $attackModifier = $levelBonus;
 
         if ($coach->getSpeciality() == Coach::SPECIALITY_DEF) {
-            $defenseModifier *= $this->settings->coachSpecialityBonus;
+            $defenseModifier *= $settings->coachSpecialityBonus;
         } elseif ($coach->getSpeciality() == Coach::SPECIALITY_MID) {
-            $midfieldModifier *= $this->settings->coachSpecialityBonus;
+            $midfieldModifier *= $settings->coachSpecialityBonus;
         } elseif ($coach->getSpeciality() == Coach::SPECIALITY_ATT) {
-            $attackModifier *= $this->settings->coachSpecialityBonus;
+            $attackModifier *= $settings->coachSpecialityBonus;
         }
 
         $modifier = new FlatSquadStrengthModifier();
@@ -279,20 +259,5 @@ class Match
         $modifier->attackModifier = $attackModifier;
 
         $team->getStrength()->applyModifier($modifier);
-    }
-
-    /**
-     * Get match result
-     *
-     * @return MatchReport
-     * @throws EngineException
-     */
-    public function getResult(): MatchReport
-    {
-        if (!$this->isPlayed) {
-            throw new EngineException('Match not played');
-        }
-
-        return $this->report;
     }
 }

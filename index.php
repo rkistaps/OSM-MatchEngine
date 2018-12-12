@@ -31,18 +31,24 @@ try {
     $coach = new Coach(Coach::SPECIALITY_ATT, 1);
     $awayTeam->setCoach($coach);
 
+    /** @var MatchSettings $settings */
     $settings = $container->get(MatchSettings::class);
+    $settings->performanceRandomRange = 0;
+    $settings->hasHomeTeamBonus = false;
 
-    $games = 500;
+    $games = 1000;
     for ($i = 0; $i <= $games - 1; $i++) {
         /** @var Match $match */
         $match = $container->make(Match::class);
 
-        $result = $match->play($homeTeam, $awayTeam, $settings);
+        $homeTeam->perform(0);
+        $awayTeam->perform(0);
 
-        if ($result->homeScore > $result->awayScore) {
+        $report = $match->play($homeTeam, $awayTeam, $settings);
+
+        if ($report->homeScore > $report->awayScore) {
             $homeTeamWins++;
-        } elseif ($result->homeScore < $result->awayScore) {
+        } elseif ($report->homeScore < $report->awayScore) {
             $awayTeamWins++;
         } else {
             $draws++;
