@@ -11,5 +11,13 @@
         "psr-4": {
             "rkistaps\\Engine\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Engine\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
     }
 }

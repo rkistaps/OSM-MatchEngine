@@ -18,7 +18,7 @@ class PlayerBuilder
      * @return Player
      * @throws EngineException
      */
-    public static function buildRandomPlayer(string $position, int $minSkill = 60, int $maxSkill = 140, int $energy = 100): Player
+    public static function buildRandomPlayer(string $position, int $minSkill = 100, int $maxSkill = 100, int $energy = 100): Player
     {
         $attributes = PlayerAttributes::fromArray([
             'id' => uniqid(),

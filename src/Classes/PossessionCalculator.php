@@ -30,11 +30,11 @@ class PossessionCalculator
      */
     public function calculate(SquadStrength $homeTeamStrength, SquadStrength $awayTeamStrength): Possession
     {
-        $homeTeamStrength = $homeTeamStrength->getMidfield();
-        $awayTeamStrength = $awayTeamStrength->getMidfield();
+        $homeTeamMidStrength = $homeTeamStrength->getMidfield();
+        $awayTeamMidStrength = $awayTeamStrength->getMidfield();
 
-        $homeTeamK = $homeTeamStrength * 2 / $awayTeamStrength;
-        $awayTeamK = $awayTeamStrength * 2 / $homeTeamStrength;
+        $homeTeamK = $homeTeamMidStrength * 2 / $awayTeamMidStrength;
+        $awayTeamK = $awayTeamMidStrength * 2 / $homeTeamMidStrength;
 
         $randomModifier = rand(100 - $this->settings->randomRange, 100 + $this->settings->randomRange) / 100;
 

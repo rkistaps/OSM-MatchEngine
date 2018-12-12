@@ -37,7 +37,7 @@ class ShootEngine
 
         $saveBonusK = $shootConfig->saveBonus * 0.05;
 
-        $goal = $goalK - $saveBonusK > $saveK;
+        $goal = $goalK > $saveK + $saveBonusK;
 
         $resultType = $goal ? ShootResult::RESULT_GOAL : ShootResult::RESULT_SAVE;
         $result = new ShootResult($resultType, $shootConfig);

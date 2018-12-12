@@ -140,9 +140,9 @@ class Match
                 $shootResult = $this->shootEngine->shoot($config);
 
                 if ($shootResult->isGoal()) {
-                    $saveBonus = ($saveBonus <= -2) ? 0 : $saveBonus + 2;
+                    $saveBonus = ($saveBonus <= -2) ? 0 : $saveBonus + 1;
                 } else {
-                    $saveBonus = ($saveBonus >= 2) ? 0 : $saveBonus - 2;
+                    $saveBonus = ($saveBonus >= 2) ? 0 : $saveBonus - 1;
                 }
 
                 if ($shootResult->isGoal()) {
@@ -152,17 +152,17 @@ class Match
         }
 
         // away team shoots
-        if ($this->homeTeamShootCount) {
+        if ($this->awayTeamShootCount) {
             $saveBonus = 0;
-            for ($i = $this->homeTeamShootCount; $i > 0; $i--) {
+            for ($i = $this->awayTeamShootCount; $i > 0; $i--) {
                 $config = $this->buildShootConfig($this->awayTeam, $this->homeTeam);
                 $config->saveBonus = $saveBonus;
                 $shootResult = $this->shootEngine->shoot($config);
 
                 if ($shootResult->isGoal()) {
-                    $saveBonus = ($saveBonus <= -2) ? 0 : $saveBonus - 1;
+                    $saveBonus = ($saveBonus <= -2) ? 0 : $saveBonus + 1;
                 } else {
-                    $saveBonus = ($saveBonus >= 2) ? 0 : $saveBonus + 1;
+                    $saveBonus = ($saveBonus >= 2) ? 0 : $saveBonus - 1;
                 }
 
                 if ($shootResult->isGoal()) {
