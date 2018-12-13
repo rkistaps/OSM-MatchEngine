@@ -1,11 +1,11 @@
 <?php
 
-namespace rkistaps\Engine\Structures;
+namespace OSM\MatchEngine\Structures;
 
-use rkistaps\Engine\Classes\LineupValidator;
-use rkistaps\Engine\Exceptions\EngineException;
-use rkistaps\Engine\Helpers\ArrayHelper;
-use rkistaps\Engine\Interfaces\TacticInterface;
+use OSM\MatchEngine\Classes\LineupValidator;
+use OSM\MatchEngine\Exceptions\EngineException;
+use OSM\MatchEngine\Helpers\ArrayHelper;
+use OSM\MatchEngine\Interfaces\TacticInterface;
 
 class Team
 {

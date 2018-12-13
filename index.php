@@ -1,12 +1,12 @@
 <?php
 
-use rkistaps\Engine\Classes\Match;
-use rkistaps\Engine\Exceptions\EngineException;
-use rkistaps\Engine\Helpers\LineupBuilder;
-use rkistaps\Engine\Structures\Coach;
-use rkistaps\Engine\Structures\MatchSettings;
-use rkistaps\Engine\Structures\Tactics\TowardsMiddle;
-use rkistaps\Engine\Structures\Team;
+use OSM\MatchEngine\Classes\Match;
+use OSM\MatchEngine\Exceptions\EngineException;
+use OSM\MatchEngine\Helpers\LineupBuilder;
+use OSM\MatchEngine\Structures\Coach;
+use OSM\MatchEngine\Structures\MatchSettings;
+use OSM\MatchEngine\Structures\Tactics\TowardsMiddle;
+use OSM\MatchEngine\Structures\Team;
 
 // use composer autoloader
 require 'vendor/autoload.php';

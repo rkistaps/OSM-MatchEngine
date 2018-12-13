@@ -1,10 +1,10 @@
 <?php
 
-namespace rkistaps\Engine\Structures\Tactics;
+namespace OSM\MatchEngine\Structures\Tactics;
 
-use rkistaps\Engine\Interfaces\TacticInterface;
-use rkistaps\Engine\Structures\FlatSquadStrengthModifier;
-use rkistaps\Engine\Structures\SquadStrength;
+use OSM\MatchEngine\Interfaces\TacticInterface;
+use OSM\MatchEngine\Structures\FlatSquadStrengthModifier;
+use OSM\MatchEngine\Structures\SquadStrength;
 
 class PlayItWideTactic implements TacticInterface
 {

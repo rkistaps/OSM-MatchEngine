@@ -7,9 +7,9 @@ namespace Engine\Tests;
 use DI\Container;
 use DI\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
-use rkistaps\Engine\Exceptions\EngineException;
-use rkistaps\Engine\Helpers\PlayerBuilder;
-use rkistaps\Engine\Structures\Player;
+use OSM\MatchEngine\Exceptions\EngineException;
+use OSM\MatchEngine\Helpers\PlayerBuilder;
+use OSM\MatchEngine\Structures\Player;
 
 abstract class TestBase extends TestCase
 {

@@ -6,12 +6,12 @@ namespace Engine\Tests;
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use rkistaps\Engine\Classes\ShootEngine;
-use rkistaps\Engine\Exceptions\EngineException;
-use rkistaps\Engine\Helpers\PlayerBuilder;
-use rkistaps\Engine\Structures\Player;
-use rkistaps\Engine\Structures\ShootConfig;
-use rkistaps\Engine\Structures\ShootResult;
+use OSM\MatchEngine\Classes\ShootEngine;
+use OSM\MatchEngine\Exceptions\EngineException;
+use OSM\MatchEngine\Helpers\PlayerBuilder;
+use OSM\MatchEngine\Structures\Player;
+use OSM\MatchEngine\Structures\ShootConfig;
+use OSM\MatchEngine\Structures\ShootResult;
 
 class ShootEngineTest extends TestBase
 {

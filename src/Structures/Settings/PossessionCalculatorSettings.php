@@ -1,6 +1,6 @@
 <?php
 
-namespace rkistaps\Engine\Structures\Settings;
+namespace OSM\MatchEngine\Structures\Settings;
 
 class PossessionCalculatorSettings
 {

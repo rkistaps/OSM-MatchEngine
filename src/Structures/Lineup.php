@@ -1,8 +1,8 @@
 <?php
 
-namespace rkistaps\Engine\Structures;
+namespace OSM\MatchEngine\Structures;
 
-use rkistaps\Engine\Exceptions\EngineException;
+use OSM\MatchEngine\Exceptions\EngineException;
 
 class Lineup
 {

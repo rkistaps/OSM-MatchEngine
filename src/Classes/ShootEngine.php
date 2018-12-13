@@ -1,9 +1,9 @@
 <?php
 
-namespace rkistaps\Engine\Classes;
+namespace OSM\MatchEngine\Classes;
 
-use rkistaps\Engine\Structures\ShootConfig;
-use rkistaps\Engine\Structures\ShootResult;
+use OSM\MatchEngine\Structures\ShootConfig;
+use OSM\MatchEngine\Structures\ShootResult;
 
 class ShootEngine
 {

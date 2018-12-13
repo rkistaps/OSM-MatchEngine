@@ -1,6 +1,6 @@
 <?php
 
-namespace rkistaps\Engine\Structures;
+namespace OSM\MatchEngine\Structures;
 
 class MatchReport
 {

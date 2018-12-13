@@ -1,9 +1,9 @@
 <?php
 
-namespace rkistaps\Engine\Structures;
+namespace OSM\MatchEngine\Structures;
 
-use rkistaps\Engine\Exceptions\EngineException;
-use rkistaps\Engine\Helpers\ArrayHelper;
+use OSM\MatchEngine\Exceptions\EngineException;
+use OSM\MatchEngine\Helpers\ArrayHelper;
 
 class Coach
 {

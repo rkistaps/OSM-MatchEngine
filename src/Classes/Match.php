@@ -1,18 +1,18 @@
 <?php
 
-namespace rkistaps\Engine\Classes;
+namespace OSM\MatchEngine\Classes;
 
-use rkistaps\Engine\Helpers\LineupHelper;
-use rkistaps\Engine\Structures\Coach;
-use rkistaps\Engine\Structures\Event;
-use rkistaps\Engine\Structures\FlatSquadStrengthModifier;
-use rkistaps\Engine\Structures\MatchSettings;
-use rkistaps\Engine\Structures\MatchReport;
-use rkistaps\Engine\Structures\Player;
-use rkistaps\Engine\Structures\RelativeSquadStrengthModifier;
-use rkistaps\Engine\Structures\ShootConfig;
-use rkistaps\Engine\Structures\SquadStrength;
-use rkistaps\Engine\Structures\Team;
+use OSM\MatchEngine\Helpers\LineupHelper;
+use OSM\MatchEngine\Structures\Coach;
+use OSM\MatchEngine\Structures\Event;
+use OSM\MatchEngine\Structures\FlatSquadStrengthModifier;
+use OSM\MatchEngine\Structures\MatchSettings;
+use OSM\MatchEngine\Structures\MatchReport;
+use OSM\MatchEngine\Structures\Player;
+use OSM\MatchEngine\Structures\RelativeSquadStrengthModifier;
+use OSM\MatchEngine\Structures\ShootConfig;
+use OSM\MatchEngine\Structures\SquadStrength;
+use OSM\MatchEngine\Structures\Team;
 
 class Match
 {

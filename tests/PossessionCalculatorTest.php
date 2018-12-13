@@ -2,10 +2,10 @@
 
 namespace Engine\Tests;
 
-use rkistaps\Engine\Classes\PossessionCalculator;
-use rkistaps\Engine\Structures\Possession;
-use rkistaps\Engine\Structures\Settings\PossessionCalculatorSettings;
-use rkistaps\Engine\Structures\SquadStrength;
+use OSM\MatchEngine\Classes\PossessionCalculator;
+use OSM\MatchEngine\Structures\Possession;
+use OSM\MatchEngine\Structures\Settings\PossessionCalculatorSettings;
+use OSM\MatchEngine\Structures\SquadStrength;
 
 class PossessionCalculatorTest extends TestBase
 {

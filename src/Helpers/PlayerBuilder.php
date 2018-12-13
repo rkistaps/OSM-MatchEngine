@@ -1,10 +1,10 @@
 <?php
 
-namespace rkistaps\Engine\Helpers;
+namespace OSM\MatchEngine\Helpers;
 
-use rkistaps\Engine\Exceptions\EngineException;
-use rkistaps\Engine\Structures\Player;
-use rkistaps\Engine\Structures\PlayerAttributes;
+use OSM\MatchEngine\Exceptions\EngineException;
+use OSM\MatchEngine\Structures\Player;
+use OSM\MatchEngine\Structures\PlayerAttributes;
 
 class PlayerBuilder
 {

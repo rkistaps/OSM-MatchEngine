@@ -1,6 +1,6 @@
 <?php
 
-namespace rkistaps\Engine\Helpers;
+namespace OSM\MatchEngine\Helpers;
 
 class ArrayHelper
 {

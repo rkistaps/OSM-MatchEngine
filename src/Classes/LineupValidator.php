@@ -1,9 +1,9 @@
 <?php
 
-namespace rkistaps\Engine\Classes;
+namespace OSM\MatchEngine\Classes;
 
-use rkistaps\Engine\Structures\Lineup;
-use rkistaps\Engine\Structures\Player;
+use OSM\MatchEngine\Structures\Lineup;
+use OSM\MatchEngine\Structures\Player;
 
 class LineupValidator
 {

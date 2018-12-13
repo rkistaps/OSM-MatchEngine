@@ -1,6 +1,6 @@
 <?php
 
-namespace rkistaps\Engine\Exceptions;
+namespace OSM\MatchEngine\Exceptions;
 
 /**
  * Generic exception

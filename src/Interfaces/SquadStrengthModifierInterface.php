@@ -1,8 +1,8 @@
 <?php
 
-namespace rkistaps\Engine\Interfaces;
+namespace OSM\MatchEngine\Interfaces;
 
-use rkistaps\Engine\Structures\SquadStrength;
+use OSM\MatchEngine\Structures\SquadStrength;
 
 interface SquadStrengthModifierInterface
 {

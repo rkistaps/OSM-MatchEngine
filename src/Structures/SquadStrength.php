@@ -1,9 +1,9 @@
 <?php
 
-namespace rkistaps\Engine\Structures;
+namespace OSM\MatchEngine\Structures;
 
-use rkistaps\Engine\Interfaces\SquadStrengthModifierInterface;
-use rkistaps\Engine\Interfaces\TacticInterface;
+use OSM\MatchEngine\Interfaces\SquadStrengthModifierInterface;
+use OSM\MatchEngine\Interfaces\TacticInterface;
 
 class SquadStrength
 {

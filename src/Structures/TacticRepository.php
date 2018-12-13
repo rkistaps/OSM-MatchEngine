@@ -1,12 +1,12 @@
 <?php
 
-namespace rkistaps\Engine\Structures;
+namespace OSM\MatchEngine\Structures;
 
-use rkistaps\Engine\Exceptions\EngineException;
-use rkistaps\Engine\Interfaces\TacticInterface;
-use rkistaps\Engine\Structures\Tactics\DefaultTactic;
-use rkistaps\Engine\Structures\Tactics\PlayItWideTactic;
-use rkistaps\Engine\Structures\Tactics\TowardsMiddle;
+use OSM\MatchEngine\Exceptions\EngineException;
+use OSM\MatchEngine\Interfaces\TacticInterface;
+use OSM\MatchEngine\Structures\Tactics\DefaultTactic;
+use OSM\MatchEngine\Structures\Tactics\PlayItWideTactic;
+use OSM\MatchEngine\Structures\Tactics\TowardsMiddle;
 
 class TacticRepository
 {

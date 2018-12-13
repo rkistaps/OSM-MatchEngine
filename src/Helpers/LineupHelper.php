@@ -1,9 +1,9 @@
 <?php
 
-namespace rkistaps\Engine\Helpers;
+namespace OSM\MatchEngine\Helpers;
 
-use rkistaps\Engine\Structures\Lineup;
-use rkistaps\Engine\Structures\Player;
+use OSM\MatchEngine\Structures\Lineup;
+use OSM\MatchEngine\Structures\Player;
 
 class LineupHelper
 {
