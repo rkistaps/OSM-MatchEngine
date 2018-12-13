@@ -1,6 +1,6 @@
 <?php
 
-namespace OSM\MatchEngine\Exceptions;
+namespace OSM\Exceptions;
 
 /**
  * Generic exception

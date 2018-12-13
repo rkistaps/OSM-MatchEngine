@@ -1,9 +1,9 @@
 <?php
 
-namespace OSM\MatchEngine\Classes;
+namespace OSM\Services;
 
-use OSM\MatchEngine\Structures\ShootConfig;
-use OSM\MatchEngine\Structures\ShootResult;
+use OSM\Structures\ShootConfig;
+use OSM\Structures\ShootResult;
 
 class ShootEngine
 {

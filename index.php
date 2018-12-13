@@ -1,12 +1,12 @@
 <?php
 
-use OSM\MatchEngine\Classes\Match;
-use OSM\MatchEngine\Exceptions\EngineException;
-use OSM\MatchEngine\Helpers\LineupBuilder;
-use OSM\MatchEngine\Structures\Coach;
-use OSM\MatchEngine\Structures\MatchSettings;
-use OSM\MatchEngine\Structures\Tactics\TowardsMiddle;
-use OSM\MatchEngine\Structures\Team;
+use OSM\Services\Match;
+use OSM\Exceptions\EngineException;
+use OSM\Helpers\LineupBuilder;
+use OSM\Structures\Coach;
+use OSM\Structures\MatchSettings;
+use OSM\Structures\Tactics\TowardsMiddle;
+use OSM\Structures\Team;
 
 // use composer autoloader
 require 'vendor/autoload.php';

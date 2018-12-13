@@ -1,8 +1,8 @@
 <?php
 
-namespace OSM\MatchEngine\Structures;
+namespace OSM\Structures;
 
-use OSM\MatchEngine\Exceptions\EngineException;
+use OSM\Exceptions\EngineException;
 
 class Lineup
 {

@@ -6,12 +6,12 @@ namespace Engine\Tests;
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use OSM\MatchEngine\Classes\ShootEngine;
-use OSM\MatchEngine\Exceptions\EngineException;
-use OSM\MatchEngine\Helpers\PlayerBuilder;
-use OSM\MatchEngine\Structures\Player;
-use OSM\MatchEngine\Structures\ShootConfig;
-use OSM\MatchEngine\Structures\ShootResult;
+use OSM\Services\ShootEngine;
+use OSM\Exceptions\EngineException;
+use OSM\Helpers\PlayerBuilder;
+use OSM\Structures\Player;
+use OSM\Structures\ShootConfig;
+use OSM\Structures\ShootResult;
 
 class ShootEngineTest extends TestBase
 {

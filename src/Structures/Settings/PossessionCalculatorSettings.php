@@ -1,6 +1,6 @@
 <?php
 
-namespace OSM\MatchEngine\Structures\Settings;
+namespace OSM\Structures\Settings;
 
 class PossessionCalculatorSettings
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace OSM\MatchEngine\Structures;
+namespace OSM\Structures;
 
-use OSM\MatchEngine\Exceptions\EngineException;
-use OSM\MatchEngine\Interfaces\TacticInterface;
-use OSM\MatchEngine\Structures\Tactics\DefaultTactic;
-use OSM\MatchEngine\Structures\Tactics\PlayItWideTactic;
-use OSM\MatchEngine\Structures\Tactics\TowardsMiddle;
+use OSM\Exceptions\EngineException;
+use OSM\Interfaces\TacticInterface;
+use OSM\Structures\Tactics\DefaultTactic;
+use OSM\Structures\Tactics\PlayItWideTactic;
+use OSM\Structures\Tactics\TowardsMiddle;
 
 class TacticRepository
 {

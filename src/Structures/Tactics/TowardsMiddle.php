@@ -1,10 +1,10 @@
 <?php
 
-namespace OSM\MatchEngine\Structures\Tactics;
+namespace OSM\Structures\Tactics;
 
-use OSM\MatchEngine\Interfaces\TacticInterface;
-use OSM\MatchEngine\Structures\FlatSquadStrengthModifier;
-use OSM\MatchEngine\Structures\SquadStrength;
+use OSM\Interfaces\TacticInterface;
+use OSM\Structures\FlatSquadStrengthModifier;
+use OSM\Structures\SquadStrength;
 
 class TowardsMiddle implements TacticInterface
 {

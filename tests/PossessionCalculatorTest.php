@@ -2,10 +2,10 @@
 
 namespace Engine\Tests;
 
-use OSM\MatchEngine\Classes\PossessionCalculator;
-use OSM\MatchEngine\Structures\Possession;
-use OSM\MatchEngine\Structures\Settings\PossessionCalculatorSettings;
-use OSM\MatchEngine\Structures\SquadStrength;
+use OSM\Services\PossessionCalculator;
+use OSM\Structures\Possession;
+use OSM\Structures\Settings\PossessionCalculatorSettings;
+use OSM\Structures\SquadStrength;
 
 class PossessionCalculatorTest extends TestBase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OSM\MatchEngine\Structures;
+namespace OSM\Structures;
 
 class ShootResult
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace OSM\MatchEngine\Structures;
+namespace OSM\Structures;
 
-use OSM\MatchEngine\Classes\LineupValidator;
-use OSM\MatchEngine\Exceptions\EngineException;
-use OSM\MatchEngine\Helpers\ArrayHelper;
-use OSM\MatchEngine\Interfaces\TacticInterface;
+use OSM\Services\LineupValidator;
+use OSM\Exceptions\EngineException;
+use OSM\Helpers\ArrayHelper;
+use OSM\Interfaces\TacticInterface;
 
 class Team
 {

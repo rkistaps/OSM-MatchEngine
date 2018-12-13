@@ -1,6 +1,6 @@
 <?php
 
-namespace OSM\MatchEngine\Helpers;
+namespace OSM\Helpers;
 
 class ArrayHelper
 {

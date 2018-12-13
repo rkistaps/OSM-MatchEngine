@@ -1,8 +1,8 @@
 <?php
 
-namespace OSM\MatchEngine\Interfaces;
+namespace OSM\Interfaces;
 
-use OSM\MatchEngine\Structures\SquadStrength;
+use OSM\Structures\SquadStrength;
 
 interface SquadStrengthModifierInterface
 {

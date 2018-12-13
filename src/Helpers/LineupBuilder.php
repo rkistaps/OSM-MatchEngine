@@ -1,11 +1,11 @@
 <?php
 
-namespace OSM\MatchEngine\Helpers;
+namespace OSM\Helpers;
 
-use OSM\MatchEngine\Classes\LineupValidator;
-use OSM\MatchEngine\Exceptions\EngineException;
-use OSM\MatchEngine\Structures\Lineup;
-use OSM\MatchEngine\Structures\Player;
+use OSM\Services\LineupValidator;
+use OSM\Exceptions\EngineException;
+use OSM\Structures\Lineup;
+use OSM\Structures\Player;
 
 class LineupBuilder
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace OSM\MatchEngine\Helpers;
+namespace OSM\Helpers;
 
-use OSM\MatchEngine\Exceptions\EngineException;
-use OSM\MatchEngine\Structures\Player;
-use OSM\MatchEngine\Structures\PlayerAttributes;
+use OSM\Exceptions\EngineException;
+use OSM\Structures\Player;
+use OSM\Structures\PlayerAttributes;
 
 class PlayerBuilder
 {

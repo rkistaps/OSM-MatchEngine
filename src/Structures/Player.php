@@ -1,9 +1,9 @@
 <?php
 
-namespace OSM\MatchEngine\Structures;
+namespace OSM\Structures;
 
-use OSM\MatchEngine\Exceptions\EngineException;
-use OSM\MatchEngine\Helpers\ArrayHelper;
+use OSM\Exceptions\EngineException;
+use OSM\Helpers\ArrayHelper;
 
 class Player
 {

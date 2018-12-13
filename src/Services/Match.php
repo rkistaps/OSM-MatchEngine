@@ -1,18 +1,18 @@
 <?php
 
-namespace OSM\MatchEngine\Classes;
+namespace OSM\Services;
 
-use OSM\MatchEngine\Helpers\LineupHelper;
-use OSM\MatchEngine\Structures\Coach;
-use OSM\MatchEngine\Structures\Event;
-use OSM\MatchEngine\Structures\FlatSquadStrengthModifier;
-use OSM\MatchEngine\Structures\MatchSettings;
-use OSM\MatchEngine\Structures\MatchReport;
-use OSM\MatchEngine\Structures\Player;
-use OSM\MatchEngine\Structures\RelativeSquadStrengthModifier;
-use OSM\MatchEngine\Structures\ShootConfig;
-use OSM\MatchEngine\Structures\SquadStrength;
-use OSM\MatchEngine\Structures\Team;
+use OSM\Helpers\LineupHelper;
+use OSM\Structures\Coach;
+use OSM\Structures\Event;
+use OSM\Structures\FlatSquadStrengthModifier;
+use OSM\Structures\MatchSettings;
+use OSM\Structures\MatchReport;
+use OSM\Structures\Player;
+use OSM\Structures\RelativeSquadStrengthModifier;
+use OSM\Structures\ShootConfig;
+use OSM\Structures\SquadStrength;
+use OSM\Structures\Team;
 
 class Match
 {

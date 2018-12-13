@@ -1,10 +1,10 @@
 <?php
 
-namespace OSM\MatchEngine\Classes;
+namespace OSM\Services;
 
-use OSM\MatchEngine\Structures\Possession;
-use OSM\MatchEngine\Structures\Settings\PossessionCalculatorSettings;
-use OSM\MatchEngine\Structures\SquadStrength;
+use OSM\Structures\Possession;
+use OSM\Structures\Settings\PossessionCalculatorSettings;
+use OSM\Structures\SquadStrength;
 
 class PossessionCalculator
 {

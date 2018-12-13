@@ -1,9 +1,9 @@
 <?php
 
-namespace OSM\MatchEngine\Structures\Tactics;
+namespace OSM\Structures\Tactics;
 
-use OSM\MatchEngine\Interfaces\TacticInterface;
-use OSM\MatchEngine\Structures\SquadStrength;
+use OSM\Interfaces\TacticInterface;
+use OSM\Structures\SquadStrength;
 
 class DefaultTactic implements TacticInterface
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace OSM\MatchEngine\Structures;
+namespace OSM\Structures;
 
-use OSM\MatchEngine\Interfaces\SquadStrengthModifierInterface;
-use OSM\MatchEngine\Interfaces\TacticInterface;
+use OSM\Interfaces\SquadStrengthModifierInterface;
+use OSM\Interfaces\TacticInterface;
 
 class SquadStrength
 {

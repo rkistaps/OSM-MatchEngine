@@ -1,9 +1,9 @@
 <?php
 
-namespace OSM\MatchEngine\Helpers;
+namespace OSM\Helpers;
 
-use OSM\MatchEngine\Structures\Lineup;
-use OSM\MatchEngine\Structures\Player;
+use OSM\Structures\Lineup;
+use OSM\Structures\Player;
 
 class LineupHelper
 {
