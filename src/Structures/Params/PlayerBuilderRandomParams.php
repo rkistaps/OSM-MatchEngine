@@ -4,26 +4,35 @@ namespace OSM\Structures\Params;
 
 use OSM\Interfaces\PlayerBuilderParamInterface;
 
-class PlayerBuilderParams implements PlayerBuilderParamInterface
+class PlayerBuilderRandomParams implements PlayerBuilderParamInterface
 {
     /** @var string */
     public $position = '';
 
     /** @var int */
-    public $skill = 0;
+    public $minSkill = 0;
 
     /** @var int */
-    public $age = 0;
+    public $maxSkill = 0;
 
     /** @var int */
-    public $energy = 100;
+    public $minAge = 0;
+
+    /** @var int */
+    public $maxAge = 0;
+
+    /** @var int */
+    public $maxEnergy = 100;
+
+    /** @var int */
+    public $minEnergy = 100;
 
     /**
      * @return int
      */
     public function getAge(): int
     {
-        return $this->age;
+        return rand($this->minAge, $this->maxAge);
     }
 
     /**
@@ -31,7 +40,7 @@ class PlayerBuilderParams implements PlayerBuilderParamInterface
      */
     public function getSkill(): int
     {
-        return $this->skill;
+        return rand($this->minSkill, $this->maxSkill);
     }
 
     /**
@@ -47,7 +56,7 @@ class PlayerBuilderParams implements PlayerBuilderParamInterface
      */
     public function getEnergy(): int
     {
-        return $this->energy;
+        return rand($this->minEnergy, $this->maxEnergy);
     }
 
     /**

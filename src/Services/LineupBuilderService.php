@@ -2,13 +2,24 @@
 
 namespace OSM\Services;
 
-use OSM\Services\LineupValidator;
 use OSM\Exceptions\EngineException;
 use OSM\Structures\Lineup;
 use OSM\Structures\Player;
 
-class LineupBuilder
+class LineupBuilderService
 {
+
+    /** @var PlayerBuilderService */
+    private $service;
+
+    /**
+     * LineupBuilderService constructor.
+     * @param PlayerBuilderService $service
+     */
+    public function __construct(PlayerBuilderService $service) {
+        $this->service = $service;
+    }
+
     /**
      * Builds random lineup
      *
@@ -17,8 +28,10 @@ class LineupBuilder
      * @param int $forwardCount
      * @return Lineup
      * @throws EngineException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
-    public static function buildRandomLineup(int $defenderCount = 4, int $midfielderCount = 4, int $forwardCount = 2): Lineup
+    public function buildRandomLineup(int $defenderCount = 4, int $midfielderCount = 4, int $forwardCount = 2): Lineup
     {
         if ($defenderCount + $midfielderCount + $forwardCount > 10) {
             throw new EngineException('Invalid player count');
@@ -41,21 +54,21 @@ class LineupBuilder
 
         $lineup = new Lineup();
 
-        $goalkeeper = PlayerBuilderService::buildRandomPlayer(Player::POS_G);
+        $goalkeeper = $this->service->buildRandomPlayer(Player::POS_G);
         $lineup->addPlayer($goalkeeper);
 
         for ($i = 0; $i != $defenderCount; $i++) {
-            $player = PlayerBuilderService::buildRandomPlayer(Player::POS_D);
+            $player = $this->service->buildRandomPlayer(Player::POS_D);
             $lineup->addPlayer($player);
         }
 
         for ($i = 0; $i != $midfielderCount; $i++) {
-            $player = PlayerBuilderService::buildRandomPlayer(Player::POS_M);
+            $player = $this->service->buildRandomPlayer(Player::POS_M);
             $lineup->addPlayer($player);
         }
 
         for ($i = 0; $i != $forwardCount; $i++) {
-            $player = PlayerBuilderService::buildRandomPlayer(Player::POS_F);
+            $player = $this->service->buildRandomPlayer(Player::POS_F);
             $lineup->addPlayer($player);
         }
 

@@ -20,7 +20,7 @@ class PlayerBuilderService
     public function buildPlayer(PlayerBuilderParamInterface $params): Player
     {
         $attributes = PlayerAttributes::fromArray([
-            'id' => uniqid(),
+            'id' => $params->getId(),
             'position' => $params->getPosition(),
             'skill' => $params->getSkill(),
             'energy' => $params->getEnergy()
@@ -33,14 +33,18 @@ class PlayerBuilderService
      * Builds random player for position
      *
      * @param string $position
+     * @param int $minSkill
+     * @param int $maxSkill
      * @return Player
      * @throws EngineException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public function buildRandomPlayer(string $position): Player
+    public function buildRandomPlayer(string $position, int $minSkill = 100, int $maxSkill = 200): Player
     {
         $params = getContainer()->get(PlayerBuilderRandomParams::class);
+        $params->minSkill = $minSkill;
+        $params->maxSkill = $maxSkill;
 
         $params->position = $position;
 

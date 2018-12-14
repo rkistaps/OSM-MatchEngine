@@ -2,7 +2,7 @@
 
 use OSM\Services\Match;
 use OSM\Exceptions\EngineException;
-use OSM\Services\LineupBuilder;
+use OSM\Services\LineupBuilderService;
 use OSM\Structures\Coach;
 use OSM\Structures\MatchSettings;
 use OSM\Structures\Tactics\TowardsMiddle;
@@ -15,13 +15,15 @@ try {
 
     $container = new DI\Container();
 
+    $lineupBuilderService = $container->get(LineupBuilderService::class);
+
     $homeTeamWins = $awayTeamWins = $draws = 0;
 
-    $homeTeamLineup = LineupBuilder::buildRandomLineup(4, 4, 2);
+    $homeTeamLineup = $lineupBuilderService->buildRandomLineup(4, 4, 2);
     $homeTeamTactic = new TowardsMiddle();
     $homeTeam = new Team(uniqid(), $homeTeamLineup, $homeTeamTactic);
 
-    $awayTeamLineup = LineupBuilder::buildRandomLineup(4, 4, 2);
+    $awayTeamLineup = $lineupBuilderService->buildRandomLineup(4, 4, 2);
     $awayTeamTactic = new TowardsMiddle();
     $awayTeam = new Team(uniqid(), $awayTeamLineup, $awayTeamTactic);
 

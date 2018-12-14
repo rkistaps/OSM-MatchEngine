@@ -5,6 +5,11 @@ namespace OSM\Interfaces;
 interface PlayerBuilderParamInterface
 {
     /**
+     * @return string
+     */
+    public function getId(): string;
+
+    /**
      * @return int
      */
     public function getAge(): int;
