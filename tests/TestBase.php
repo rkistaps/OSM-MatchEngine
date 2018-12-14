@@ -6,6 +6,7 @@ namespace Engine\Tests;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use OSM\Structures\Params\PlayerBuilderParams;
 use PHPUnit\Framework\TestCase;
 use OSM\Exceptions\EngineException;
 use OSM\Services\PlayerBuilderService;
@@ -27,12 +28,19 @@ abstract class TestBase extends TestCase
      * Creates standard player for tests in position
      *
      * @param string $pos
+     * @param int $skill
      * @return Player
      * @throws EngineException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
-    public function getStandardPlayer(string $pos): Player
+    public function getStandardPlayer(string $pos, int $skill = 100): Player
     {
-        $player = PlayerBuilderService::buildRandomPlayer($pos, 100, 100, 100);
+        $params = $this->container->get(PlayerBuilderParams::class);
+        $params->skill = $skill;
+        $params->position = $pos;
+
+        $player = $this->container->get(PlayerBuilderService::class)->buildPlayer($params);
         $player->perform(0);
 
         return $player;
