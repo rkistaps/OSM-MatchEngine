@@ -8,7 +8,7 @@ use DI\Container;
 use DI\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
 use OSM\Exceptions\EngineException;
-use OSM\Helpers\PlayerBuilder;
+use OSM\Services\PlayerBuilderService;
 use OSM\Structures\Player;
 
 abstract class TestBase extends TestCase
@@ -32,7 +32,7 @@ abstract class TestBase extends TestCase
      */
     public function getStandardPlayer(string $pos): Player
     {
-        $player = PlayerBuilder::buildRandomPlayer($pos, 100, 100, 100);
+        $player = PlayerBuilderService::buildRandomPlayer($pos, 100, 100, 100);
         $player->perform(0);
 
         return $player;

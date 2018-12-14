@@ -2,7 +2,7 @@
 
 use OSM\Services\Match;
 use OSM\Exceptions\EngineException;
-use OSM\Helpers\LineupBuilder;
+use OSM\Services\LineupBuilder;
 use OSM\Structures\Coach;
 use OSM\Structures\MatchSettings;
 use OSM\Structures\Tactics\TowardsMiddle;

@@ -1,6 +1,6 @@
 <?php
 
-namespace OSM\Helpers;
+namespace OSM\Services;
 
 use OSM\Services\LineupValidator;
 use OSM\Exceptions\EngineException;
@@ -41,21 +41,21 @@ class LineupBuilder
 
         $lineup = new Lineup();
 
-        $goalkeeper = PlayerBuilder::buildRandomPlayer(Player::POS_G);
+        $goalkeeper = PlayerBuilderService::buildRandomPlayer(Player::POS_G);
         $lineup->addPlayer($goalkeeper);
 
         for ($i = 0; $i != $defenderCount; $i++) {
-            $player = PlayerBuilder::buildRandomPlayer(Player::POS_D);
+            $player = PlayerBuilderService::buildRandomPlayer(Player::POS_D);
             $lineup->addPlayer($player);
         }
 
         for ($i = 0; $i != $midfielderCount; $i++) {
-            $player = PlayerBuilder::buildRandomPlayer(Player::POS_M);
+            $player = PlayerBuilderService::buildRandomPlayer(Player::POS_M);
             $lineup->addPlayer($player);
         }
 
         for ($i = 0; $i != $forwardCount; $i++) {
-            $player = PlayerBuilder::buildRandomPlayer(Player::POS_F);
+            $player = PlayerBuilderService::buildRandomPlayer(Player::POS_F);
             $lineup->addPlayer($player);
         }
 

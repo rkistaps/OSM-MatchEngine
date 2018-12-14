@@ -10,7 +10,8 @@
     "autoload": {
         "psr-4": {
             "OSM\\": "src/"
-        }
+        },
+        "files": ["src/bootstrap.php"]
     },
     "autoload-dev": {
         "psr-4": {

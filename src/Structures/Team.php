@@ -4,7 +4,7 @@ namespace OSM\Structures;
 
 use OSM\Services\LineupValidator;
 use OSM\Exceptions\EngineException;
-use OSM\Helpers\ArrayHelper;
+use OSM\Services\ArrayHelper;
 use OSM\Interfaces\TacticInterface;
 
 class Team

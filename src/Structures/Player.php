@@ -3,7 +3,7 @@
 namespace OSM\Structures;
 
 use OSM\Exceptions\EngineException;
-use OSM\Helpers\ArrayHelper;
+use OSM\Services\ArrayHelper;
 
 class Player
 {
